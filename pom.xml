@@ -8,13 +8,58 @@
     <artifactId>Library</artifactId>
     <version>0.1-SNAPSHOT</version>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <liquibase.maven.plugin.version>3.4.2</liquibase.maven.plugin.version>
+        <jdbc.driver.version>42.0.0</jdbc.driver.version>
+        <liquibase.core.version>3.5.3</liquibase.core.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.version>3.6.1</maven.compiler.version>
+    </properties>
+
     <dependencies>
+        <!--liquibase-core-->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.core.version}</version>
+        </dependency>
+        <!--JDBC driver-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${jdbc.driver.version}</version>
+        </dependency>
 
     </dependencies>
 
     <build>
         <plugins>
-            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${liquibase.maven.plugin.version}</version>
+                <configuration>
+                    <propertyFile>src/main/resources/liquibase/liquibase.properties</propertyFile>
+                </configuration>
+                <!--<executions>
+                    <execution>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                </executions>-->
+            </plugin>
         </plugins>
     </build>
 

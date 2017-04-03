@@ -1,20 +1,15 @@
 package com.softserveinc.dsoky.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class Book {
-    @JsonProperty
     private long id;
-    @JsonProperty
     private String name;
-    @JsonProperty
-    private String isnb;
-    @JsonProperty
-    private Author author;
-    @JsonProperty
+    private String isbn;
     private Genre genre;
-    @JsonProperty
     private Publisher publisher;
+    private List<Author> authors;
 }

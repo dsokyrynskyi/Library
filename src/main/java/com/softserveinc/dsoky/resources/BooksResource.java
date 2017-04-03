@@ -13,16 +13,12 @@ import javax.ws.rs.core.MediaType;
 @Path("/book/{id}")
 @Produces(MediaType.APPLICATION_JSON)
 public class BooksResource {
-    private final BookDAO bookDAO= new BookDAOImpl();
+
+    private final BookDAO bookDAO = new BookDAOImpl();
 
     @GET
     public Book fetchBook(@PathParam("id") long id){
-       // return bookDAO.get(id);
-        Book book = new Book();
-        book.setId(789);
-        book.setName("Scala in Depth");
-        book.setIsnb("3223424234234");
-        return book;
+        return bookDAO.get(id);
     }
 
 }

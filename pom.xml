@@ -52,13 +52,14 @@
                 <configuration>
                     <propertyFile>src/main/resources/liquibase/liquibase.properties</propertyFile>
                 </configuration>
-                <!--<executions>
+                <executions>
                     <execution>
+                    <phase>process-resources</phase>
                         <goals>
                             <goal>update</goal>
                         </goals>
                     </execution>
-                </executions>-->
+                </executions>
             </plugin>
         </plugins>
     </build>

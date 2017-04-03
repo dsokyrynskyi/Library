@@ -4,10 +4,38 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-        <changeSet id="1" author="daniel">
+        <changeSet id="3" author="daniel">
             <createTable tableName="Book">
                 <column name="book_id" autoIncrement="true" type="integer">
                     <constraints primaryKey="true" nullable="false"/>
+                </column>
+                <column name="name" type="varchar(200)">
+                    <constraints nullable="false"/>
+                </column>
+                <column name="isbn" type="varchar(100)"/>
+                <column name="publish_date" type="date"/>
+                <column name="genre" type="integer"/>
+                <column name="publisher" type="integer"/>
+            </createTable>
+        </changeSet>
+
+        <changeSet id="4" author="daniel">
+            <addForeignKeyConstraint baseTableName="Book"
+                                     baseColumnNames="genre"
+                                     constraintName="fk_genre_id"
+                                     referencedTableName="Genre"
+                                     referencedColumnNames="genre_id"/>
+            <addForeignKeyConstraint baseTableName="Book"
+                                     baseColumnNames="publisher"
+                                     constraintName="fk_publisher_id"
+                                     referencedTableName="Publisher"
+                                     referencedColumnNames="publisher_id"/>
+            <createTable tableName="books_authors">
+                <column name="book_id" type="integer">
+                    <constraints primaryKey="true" nullable="false" foreignKeyName="book_id" referencedTableName="Book" referencedColumnNames="book_id"/>
+                </column>
+                <column name="author_id" type="integer">
+                    <constraints primaryKey="true" nullable="false" foreignKeyName="author_id" referencedTableName="author" referencedColumnNames="author_id"/>
                 </column>
             </createTable>
         </changeSet>

@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-        <include file="create-table-author.sql" relativeToChangelogFile="true"/>
+        <include file="create-table-author.xml" relativeToChangelogFile="true"/>
         <include file="create-table-genre.xml" relativeToChangelogFile="true"/>
         <include file="create-table-publisher.xml" relativeToChangelogFile="true"/>
         <include file="create-table-book.xml" relativeToChangelogFile="true"/>

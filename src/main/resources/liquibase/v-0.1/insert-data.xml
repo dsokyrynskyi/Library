@@ -148,7 +148,6 @@
         </update>
         <update tableName="Book">
             <column name="genre">10</column>
-            <column name="genre">6</column>
             <column name="publisher">2</column>
             <where>book_id = 2</where>
         </update>

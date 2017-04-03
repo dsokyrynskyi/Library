@@ -8,5 +8,7 @@
         <include file="create-table-genre.xml" relativeToChangelogFile="true"/>
         <include file="create-table-publisher.xml" relativeToChangelogFile="true"/>
         <include file="create-table-book.xml" relativeToChangelogFile="true"/>
+
+        <include file="insert-data.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
 

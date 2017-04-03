@@ -6,7 +6,122 @@
 
     <changeSet id="6" author="daniel">
         <insert tableName="Genre">
+            <column name="name">Adventure</column>
+        </insert>
+        <insert tableName="Genre">
             <column name="name">Science Fiction</column>
         </insert>
+        <insert tableName="Genre">
+            <column name="name">Comedy</column>
+        </insert>
+        <insert tableName="Genre">
+            <column name="name">Fantasy</column>
+        </insert>
+        <insert tableName="Genre">
+            <column name="name">Drama</column>
+        </insert>
+        <insert tableName="Genre">
+            <column name="name">Horror</column>
+        </insert>
+        <insert tableName="Genre">
+            <column name="name">Romance Novel</column>
+        </insert>
+        <insert tableName="Genre">
+            <column name="name">Crime</column>
+        </insert>
+        <insert tableName="Genre">
+            <column name="name">Biography</column>
+        </insert>
+        <insert tableName="Genre">
+            <column name="name">Computers</column>
+        </insert>
+        <rollback>
+            <delete tableName="Genre"/>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="7" author="daniel">
+        <insert tableName="Publisher">
+            <column name="name">Pearson</column>
+            <column name="country">UK</column>
+        </insert>
+        <insert tableName="Publisher">
+            <column name="name">ThomsonReuters</column>
+            <column name="country">Canada</column>
+        </insert>
+        <insert tableName="Publisher">
+            <column name="name">Penguin Random House</column>
+            <column name="country">Germany</column>
+        </insert>
+        <insert tableName="Publisher">
+            <column name="name">Scholastic</column>
+            <column name="country">US</column>
+        </insert>
+        <insert tableName="Publisher">
+            <column name="name">China Publishing Group</column>
+            <column name="country">China</column>
+        </insert>
+        <insert tableName="Publisher">
+            <column name="name">McGraw-Hill Education</column>
+            <column name="country">US</column>
+        </insert>
+        <insert tableName="Publisher">
+            <column name="name">De Agostini Editore</column>
+            <column name="country">Italy</column>
+        </insert>
+        <rollback>
+            <delete tableName="Publisher"/>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="8" author="daniel">
+        <insert tableName="Author">
+            <column name="name">Joshua Bloch</column>
+            <column name="birth_date">28.07.1961</column>
+        </insert>
+        <insert tableName="Author">
+            <column name="name">Martin Odersky</column>
+            <column name="birth_date">05.09.1958</column>
+        </insert>
+        <insert tableName="Author">
+            <column name="name">Ilya Ilf</column>
+            <column name="birth_date">12.12.1897</column>
+        </insert>
+        <insert tableName="Author">
+            <column name="name">Yevgeniy Petrov</column>
+            <column name="birth_date">11.10.1903</column>
+        </insert>
+        <insert tableName="Author">
+            <column name="name">Fyodor Dostoyevsky</column>
+            <column name="birth_date">11.11.1821</column>
+        </insert>
+        <insert tableName="Author">
+            <column name="name">Leo Tolstoy</column>
+            <column name="birth_date">09.09.1828</column>
+        </insert>
+        <rollback>
+            <delete tableName="Author"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="9" author="daniel">
+        <insert tableName="Book">
+            <column name="name">Effective Java</column>
+            <column name="isbn">9780321356680</column>
+            <column name="publish_date">07.05.2004</column>
+        </insert>
+        <insert tableName="Book">
+            <column name="name">Programming in Scala</column>
+            <column name="isbn">0981531644</column>
+            <column name="publish_date">04.03.2012</column>
+        </insert>
+        <insert tableName="Book">
+            <column name="name">Anna Karenina</column>
+            <column name="isbn">8601400171455</column>
+            <column name="publish_date">11.03.1865</column>
+        </insert>
+        <rollback>
+            <delete tableName="Book"/>
+        </rollback>
     </changeSet>
 </databaseChangeLog>

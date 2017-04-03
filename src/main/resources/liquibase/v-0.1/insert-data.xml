@@ -124,4 +124,19 @@
             <delete tableName="Book"/>
         </rollback>
     </changeSet>
+    
+    <changeSet id="10" author="daniel">
+        <insert tableName="Books_Authors">
+            <column name="book_id">1</column>
+            <column name="author_id">1</column>
+        </insert>
+        <insert tableName="Books_Authors">
+            <column name="book_id">2</column>
+            <column name="author_id">2</column>
+        </insert>
+        <insert tableName="Books_Authors">
+            <column name="book_id">3</column>
+            <column name="author_id">6</column>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

@@ -10,10 +10,14 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
+ * GET
  * book/all
  * book/{id}
  * book/byName?name={name}
  * book/byAuthor?author={author}
+ *
+ * PUT
+ * book
  * */
 
 @Component
@@ -52,4 +56,9 @@ public class BooksResource {
         return bookDAO.getByName(name);
     }
 
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void saveBook(Book book){
+        bookDAO.save(book);
+    }
 }

@@ -9,6 +9,13 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+/**
+ * book/all
+ * book/{id}
+ * book/byName?name={name}
+ * book/byAuthor?author={author}
+ * */
+
 @Component
 @Path("/book/")
 @Produces(MediaType.APPLICATION_JSON)
@@ -44,4 +51,5 @@ public class BooksResource {
     public Book fetchByName(@QueryParam("name") String name){
         return bookDAO.getByName(name);
     }
+
 }

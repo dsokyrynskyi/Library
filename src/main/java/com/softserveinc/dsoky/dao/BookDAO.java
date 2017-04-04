@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public interface BookDAO {
     Collection<Book> getAll();
-    Collection<Book> getByAuthor(Author author);
+    Collection<Book> getByAuthor(String author);
     Book get(long id);
     Book getByName(String name);
     void save(Book book);

@@ -10,4 +10,14 @@ public class Author {
     private String name;
     private String country;
     private LocalDate date;
+
+    public Author() {
+    }
+
+    public Author(long id, String name, String country, LocalDate date) {
+        this.id = id;
+        this.name = name;
+        this.country = country;
+        this.date = date;
+    }
 }

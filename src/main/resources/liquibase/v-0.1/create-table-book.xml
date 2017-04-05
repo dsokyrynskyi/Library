@@ -37,4 +37,9 @@
             </createTable>
         </changeSet>
 
+    <changeSet id="13" author="daniel">
+        <createIndex tableName="Book" indexName="idx_name">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

@@ -2,6 +2,7 @@ package com.softserveinc.dsoky;
 
 import com.softserveinc.dsoky.resources.AuthorsResource;
 import com.softserveinc.dsoky.resources.BooksResource;
+import com.softserveinc.dsoky.resources.PublisherResource;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -19,6 +20,7 @@ public class LibraryApplication extends Application<LibraryConfiguration>{
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(LibrarySpringConfiguration.class);
         environment.jersey().register(context.getBean(BooksResource.class));
         environment.jersey().register(context.getBean(AuthorsResource.class));
+        environment.jersey().register(context.getBean(PublisherResource.class));
     }
 
     @Override

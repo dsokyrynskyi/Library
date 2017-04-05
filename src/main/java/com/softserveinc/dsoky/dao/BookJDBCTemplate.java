@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -112,7 +115,37 @@ public class BookJDBCTemplate implements BookDAO{
 
     @Override
     public void save(Book book) {
-        System.out.printf("save");
+        final String sql_book = "insert into \"Book\" (name, isbn, publish_date) \n" +
+                                "values (:book_name, :book_isbn, :book_date);";
+        final String sql_auth = "insert into \"Author\" (name, birth_date, country) \n" +
+                                "values (:auth_name, :auth_birth, :auth_country)";
+        final String sql_books_authors = "insert into \"Books_Authors\" values (:book_id, :auth_id)";
+        long bookId = insertBookFields(book, sql_book);
+        long authId = insertAuthorFields(book, sql_auth);
+        insertBooksAuthors(sql_books_authors, bookId, authId);
+    }
+
+    private void insertBooksAuthors(String sql_books_authors, long bookId, long authId) {
+        SqlParameterSource paramsBook = new MapSqlParameterSource("book_id", bookId)
+                                                                .addValue("auth_id", authId);
+        jdbcTemplate.update(sql_books_authors, paramsBook);
+    }
+
+    private long insertBookFields(Book book, String sql_book) {
+        SqlParameterSource paramsBook = new MapSqlParameterSource("book_name", book.getName())
+                                                                .addValue("book_isbn", book.getIsbn())
+                                                                .addValue("book_date", book.getPublishDate());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(sql_book, paramsBook, keyHolder, new String[]{"book_id"});
+        return keyHolder.getKey().longValue();
+    }
+    private long insertAuthorFields(Book book, String sql_auth) {
+        SqlParameterSource paramsBook = new MapSqlParameterSource("auth_name", "Billy Wong")
+                .addValue("auth_birth", LocalDate.now())
+                .addValue("auth_country", "Island");
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(sql_auth, paramsBook, keyHolder, new String[]{"author_id"});
+        return keyHolder.getKey().longValue();
     }
 
     @Override

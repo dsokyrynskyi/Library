@@ -1,5 +1,6 @@
 package com.softserveinc.dsoky.resources;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.softserveinc.dsoky.api.Book;
 import com.softserveinc.dsoky.dao.BookDAO;
 import org.springframework.beans.factory.annotation.Autowired;

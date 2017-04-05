@@ -9,6 +9,15 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+/**
+ GET     /authors/
+ POST    /authors/
+ PUT     /authors/ 
+ GET     /authors/title/{name}
+ DELETE  /authors/{id}
+ GET     /authors/{id}
+ */
+
 @Component
 @Path("/authors/")
 public class AuthorsResource {

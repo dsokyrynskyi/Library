@@ -1,20 +1,38 @@
 package com.softserveinc.dsoky.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class Book {
-    @JsonProperty
     private long id;
-    @JsonProperty
     private String name;
-    @JsonProperty
-    private String isnb;
-    @JsonProperty
-    private Author author;
-    @JsonProperty
-    private Genre genre;
-    @JsonProperty
+    private String isbn;
+    private LocalDate publishDate;
+    private String genre;
     private Publisher publisher;
+    private List<Author> authors = new ArrayList<>();
+
+    public Book() {
+    }
+
+    public Book(long id, String name, String isbn, LocalDate publishDate, String genre) {
+        this.id = id;
+        this.name = name;
+        this.isbn = isbn;
+        this.publishDate = publishDate;
+        this.genre = genre;
+    }
+
+    public Book(long id, String name, String isbn, LocalDate publishDate, String genre, Publisher publisher) {
+        this.id = id;
+        this.name = name;
+        this.isbn = isbn;
+        this.publishDate = publishDate;
+        this.genre = genre;
+        this.publisher = publisher;
+    }
 }

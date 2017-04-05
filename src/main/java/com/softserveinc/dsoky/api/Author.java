@@ -1,18 +1,27 @@
 package com.softserveinc.dsoky.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
 public class Author {
-    @JsonProperty
     private long id;
-    @JsonProperty
     private String name;
-    @JsonProperty
     private String country;
-    @JsonProperty
     private LocalDate date;
+
+    public Author() {
+    }
+
+    public Author(long id) {
+        this.id = id;
+    }
+
+    public Author(long id, String name, String country, LocalDate date) {
+        this.id = id;
+        this.name = name;
+        this.country = country;
+        this.date = date;
+    }
 }

@@ -1,14 +1,19 @@
 package com.softserveinc.dsoky.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class Publisher {
-    @JsonProperty
     private long id;
-    @JsonProperty
     private String name;
-    @JsonProperty
     private String country;
+
+    public Publisher() {
+    }
+
+    public Publisher(long id, String name, String country) {
+        this.id = id;
+        this.name = name;
+        this.country = country;
+    }
 }

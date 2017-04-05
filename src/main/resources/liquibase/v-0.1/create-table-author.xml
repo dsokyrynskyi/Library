@@ -9,8 +9,8 @@
             <column name="author_id" autoIncrement="true" type="integer">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(200)" >
-                <constraints nullable="false"/>
+            <column name="name" type="varchar(200)">
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="birth_date" type="date"/>
             <column name="country" type="varchar(200)"/>

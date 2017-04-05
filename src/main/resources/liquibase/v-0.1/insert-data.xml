@@ -3,42 +3,6 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
-
-    <changeSet id="6" author="daniel">
-        <insert tableName="Genre">
-            <column name="name">Adventure</column>
-        </insert>
-        <insert tableName="Genre">
-            <column name="name">Science Fiction</column>
-        </insert>
-        <insert tableName="Genre">
-            <column name="name">Comedy</column>
-        </insert>
-        <insert tableName="Genre">
-            <column name="name">Fantasy</column>
-        </insert>
-        <insert tableName="Genre">
-            <column name="name">Drama</column>
-        </insert>
-        <insert tableName="Genre">
-            <column name="name">Horror</column>
-        </insert>
-        <insert tableName="Genre">
-            <column name="name">Romance Novel</column>
-        </insert>
-        <insert tableName="Genre">
-            <column name="name">Crime</column>
-        </insert>
-        <insert tableName="Genre">
-            <column name="name">Biography</column>
-        </insert>
-        <insert tableName="Genre">
-            <column name="name">Computers</column>
-        </insert>
-        <rollback>
-            <delete tableName="Genre"/>
-        </rollback>
-    </changeSet>
     
     <changeSet id="7" author="daniel">
         <insert tableName="Publisher">
@@ -142,21 +106,24 @@
             <column name="book_id">3</column>
             <column name="author_id">6</column>
         </insert>
+        <rollback>
+            <delete tableName="Books_Authors"/>
+        </rollback>
     </changeSet>
 
     <changeSet id="11" author="daniel">
         <update tableName="Book">
-            <column name="genre">10</column>
+            <column name="genre">Computers</column>
             <column name="publisher">1</column>
             <where>book_id = 1</where>
         </update>
         <update tableName="Book">
-            <column name="genre">10</column>
+            <column name="genre">Horror</column>
             <column name="publisher">2</column>
             <where>book_id = 2</where>
         </update>
         <update tableName="Book">
-            <column name="genre">7</column>
+            <column name="genre">Roman</column>
             <column name="publisher">2</column>
             <where>book_id = 3</where>
         </update>

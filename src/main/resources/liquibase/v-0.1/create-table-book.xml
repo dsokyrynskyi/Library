@@ -10,21 +10,18 @@
                     <constraints primaryKey="true" nullable="false"/>
                 </column>
                 <column name="name" type="varchar(200)">
-                    <constraints nullable="false"/>
+                    <constraints nullable="false" unique="true"/>
                 </column>
-                <column name="isbn" type="varchar(100)"/>
+                <column name="isbn" type="varchar(100)">
+                    <constraints unique="true"/>
+                </column>
                 <column name="publish_date" type="date"/>
-                <column name="genre" type="integer"/>
+                <column name="genre" type="varchar(100)"/>
                 <column name="publisher" type="integer"/>
             </createTable>
         </changeSet>
 
         <changeSet id="5" author="daniel">
-            <addForeignKeyConstraint baseTableName="Book"
-                                     baseColumnNames="genre"
-                                     constraintName="fk_genre_id"
-                                     referencedTableName="Genre"
-                                     referencedColumnNames="genre_id"/>
             <addForeignKeyConstraint baseTableName="Book"
                                      baseColumnNames="publisher"
                                      constraintName="fk_publisher_id"

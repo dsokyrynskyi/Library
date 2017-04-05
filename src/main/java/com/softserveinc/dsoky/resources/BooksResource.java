@@ -15,7 +15,7 @@ import java.util.List;
  * books/{id}
  * books/title/{name}
  * books/author/{name}
- *
+ * <p>
  * PUT
  * books
  */
@@ -34,7 +34,7 @@ public class BooksResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Book> fetchAll() {
-        return (List<Book>) bookDAO.getAll();
+        return bookDAO.getAll();
     }
 
     @GET
@@ -48,7 +48,7 @@ public class BooksResource {
     @Path("author/{name}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Book> fetchByAuthor(@PathParam("name") String author) {
-        return (List<Book>) bookDAO.getByAuthor(author);
+        return bookDAO.getByAuthor(author);
     }
 
     @GET
@@ -62,5 +62,17 @@ public class BooksResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public void saveBook(Book book) {
         bookDAO.save(book);
+    }
+
+    @DELETE
+    @Path("{id}")
+    public void removeBook(@PathParam("id") long id) {
+        bookDAO.remove(id);
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateBook(Book book) {
+        bookDAO.update(book);
     }
 }

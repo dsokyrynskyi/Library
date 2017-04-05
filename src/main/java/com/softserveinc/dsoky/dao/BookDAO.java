@@ -1,13 +1,12 @@
 package com.softserveinc.dsoky.dao;
 
-import com.softserveinc.dsoky.api.Author;
 import com.softserveinc.dsoky.api.Book;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface BookDAO {
-    Collection<Book> getAll();
-    Collection<Book> getByAuthor(String author);
+    List<Book> getAll();
+    List<Book> getByAuthor(String author);
     Book get(long id);
     Book getByName(String name);
     void save(Book book);

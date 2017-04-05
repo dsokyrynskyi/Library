@@ -14,6 +14,10 @@ public class Author {
     public Author() {
     }
 
+    public Author(long id) {
+        this.id = id;
+    }
+
     public Author(long id, String name, String country, LocalDate date) {
         this.id = id;
         this.name = name;

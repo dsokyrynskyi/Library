@@ -26,7 +26,7 @@ public class BookRepository implements BookDAO {
 
     @Override
     public List<Book> getAll() {
-        final String sql = "SELECT * FROM Book";
+        final String sql = "SELECT * FROM \"Book\"";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new Book(
                 rs.getInt("book_id"),
                 rs.getString("name"),
@@ -81,10 +81,11 @@ public class BookRepository implements BookDAO {
         final String sqlAuth = "INSERT INTO \"Author\" (name, birth_date, country) VALUES (:auth_name, :auth_birth, :auth_country)";
         final String sqlBooksAuthors = "INSERT INTO \"Books_Authors\" VALUES (:book_id, :auth_id)";
         long bookId = insertBookFields(book, sqlBook);
-        book.getAuthors()
-                .stream()
-                .map(author -> insertAuthorFields(author, sqlAuth))
-                .forEach(authId -> insertBooksAuthors(sqlBooksAuthors, bookId, authId));
+        if(book.getAuthors() != null)
+            book.getAuthors()
+                    .stream()
+                    .map(author -> insertAuthorFields(author, sqlAuth))
+                    .forEach(authId -> insertBooksAuthors(sqlBooksAuthors, bookId, authId));
     }
 
     private void insertBooksAuthors(String sqlBooksAuthors, long bookId, long authId) {
@@ -103,12 +104,19 @@ public class BookRepository implements BookDAO {
     }
 
     private long insertAuthorFields(Author author, String sqlAuthor) {
+        if (checkIfExists(author)) return author.getId();
         SqlParameterSource paramsBook = new MapSqlParameterSource("auth_name", author.getName())
                 .addValue("auth_birth", author.getDate())
                 .addValue("auth_country", author.getCountry());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(sqlAuthor, paramsBook, keyHolder, new String[]{"author_id"});
         return keyHolder.getKey().longValue();
+    }
+
+    private boolean checkIfExists(Author author) {
+        final String sql = "select * from \"Author\" where name = :name";
+        Author a = jdbcTemplate.queryForObject(sql, new MapSqlParameterSource("name", author.getName()), (rs, rowNum) -> new Author(rs.getInt("id")));
+        return a.getId() == 0;
     }
 
     @Override

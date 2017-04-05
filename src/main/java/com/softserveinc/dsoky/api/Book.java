@@ -3,6 +3,7 @@ package com.softserveinc.dsoky.api;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,7 +14,7 @@ public class Book {
     private LocalDate publishDate;
     private String genre;
     private Publisher publisher;
-    private List<Author> authors;
+    private List<Author> authors = new ArrayList<>();
 
     public Book() {
     }

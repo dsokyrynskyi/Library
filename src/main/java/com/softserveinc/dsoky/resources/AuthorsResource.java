@@ -12,7 +12,7 @@ import java.util.List;
 /**
  GET     /authors/
  POST    /authors/
- PUT     /authors/ 
+ PUT     /authors/
  GET     /authors/title/{name}
  DELETE  /authors/{id}
  GET     /authors/{id}

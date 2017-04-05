@@ -52,14 +52,25 @@ public class BookRepository implements BookDAO {
 
     @Override
     public Book get(long id) {
-        final String sql = "SELECT * FROM \"Book\" WHERE book_id = :id";
+        final String sqlBook = "SELECT * FROM \"Book\" WHERE book_id = :id";
+        final String sqlAuth = "SELECT * FROM \"Author\" " +
+                "INNER JOIN \"Books_Authors\" ON \"Books_Authors\".author_id = \"Author\".author_id\n " +
+                "INNER JOIN \"Book\" ON \"Book\".book_id = \"Books_Authors\".book_id\n" +
+                "WHERE \"Book\".book_id = :id";
         SqlParameterSource param = new MapSqlParameterSource("id", id);
-        return jdbcTemplate.queryForObject(sql, param, (rs, rn) -> new Book(
+        Book book = jdbcTemplate.queryForObject(sqlBook, param, (rs, rn) -> new Book(
                 rs.getInt("book_id"),
                 rs.getString("name"),
                 rs.getString("isbn"),
                 rs.getDate("publish_date").toLocalDate(),
                 rs.getString("genre")));
+        List<Author> authors = jdbcTemplate.query(sqlAuth, param, (rs, rowNum) -> new Author(
+                rs.getInt("author_id"),
+                rs.getString("name"),
+                rs.getString("country"),
+                rs.getDate("birth_date").toLocalDate()));
+        book.setAuthors(authors);
+        return book;
     }
 
     @Override
@@ -114,9 +125,9 @@ public class BookRepository implements BookDAO {
     }
 
     private boolean checkIfExists(Author author) {
-        final String sql = "select * from \"Author\" where name = :name";
-        Author a = jdbcTemplate.queryForObject(sql, new MapSqlParameterSource("name", author.getName()), (rs, rowNum) -> new Author(rs.getInt("id")));
-        return a.getId() == 0;
+        final String sql = "select * from \"Author\" where \"Author\".name = :name";
+        Author a = jdbcTemplate.queryForObject(sql, new MapSqlParameterSource("name", author.getName()), (rs, rowNum) -> new Author(rs.getInt("author_id")));
+        return a.getId() != 0;
     }
 
     @Override

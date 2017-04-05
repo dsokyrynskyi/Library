@@ -10,14 +10,13 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
- * GET
- * books
- * books/{id}
- * books/title/{name}
- * books/author/{name}
- * <p>
- * PUT
- * books
+ GET     /books/
+ POST    /books/
+ PUT     /books/
+ GET     /books/author/{name}
+ GET     /books/title/{name}
+ DELETE  /books/{id}
+ GET     /books/{id}
  */
 
 @Component

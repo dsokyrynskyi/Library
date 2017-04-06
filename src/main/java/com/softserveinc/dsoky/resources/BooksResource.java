@@ -2,6 +2,9 @@ package com.softserveinc.dsoky.resources;
 
 import com.softserveinc.dsoky.api.Book;
 import com.softserveinc.dsoky.dao.BookDAO;
+import com.softserveinc.dsoky.dto.BookDTO;
+import com.softserveinc.dsoky.exceptions.NoSuchBookException;
+import com.softserveinc.dsoky.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +16,7 @@ import java.util.List;
  GET     /books/
  POST    /books/
  PUT     /books/
- GET     /books/author/{name}
+ GET     /books/author/{id}
  GET     /books/title/{name}
  DELETE  /books/{id}
  GET     /books/{id}
@@ -23,55 +26,55 @@ import java.util.List;
 @Path("/books/")
 public class BooksResource {
 
-    private final BookDAO bookDAO;
+    private final BookService bookService;
 
     @Autowired
-    public BooksResource(BookDAO bookDAO) {
-        this.bookDAO = bookDAO;
+    public BooksResource(BookService bookService) {
+        this.bookService = bookService;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Book> fetchAll() {
-        return bookDAO.getAll();
+    public List<BookDTO> fetchAll() {
+        return bookService.getAllBookDTOs();
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Book fetchBook(@PathParam("id") long id) {
-        return bookDAO.get(id);
+    public BookDTO fetchBook(@PathParam("id") long id) throws NoSuchBookException {
+        return bookService.getBookDTO(id);
     }
 
     @GET
-    @Path("author/{name}")
+    @Path("author/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Book> fetchByAuthor(@PathParam("name") String author) {
-        return bookDAO.getByAuthor(author);
+    public List<BookDTO> fetchByAuthor(@PathParam("id") long authorId) {
+        return bookService.getDTOByAuthor(authorId);
     }
 
     @GET
     @Path("title/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Book fetchByName(@PathParam("name") String name) {
-        return bookDAO.getByName(name);
+    public BookDTO fetchByName(@PathParam("name") String name) throws NoSuchBookException {
+        return bookService.getDTOByName(name);
     }
 
-    @PUT
+    /*@POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void saveBook(Book book) {
-        bookDAO.save(book);
-    }
+    public void saveBook(BookDTO book) {
+        bookService.saveDTO(book);
+    }*/
 
     @DELETE
     @Path("{id}")
     public void removeBook(@PathParam("id") long id) {
-        bookDAO.remove(id);
+        bookService.remove(id);
     }
 
-    @POST
+    @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateBook(Book book) {
-        bookDAO.update(book);
+    public void updateBook(BookDTO bookDTO) {
+        bookService.update(bookDTO);
     }
 }

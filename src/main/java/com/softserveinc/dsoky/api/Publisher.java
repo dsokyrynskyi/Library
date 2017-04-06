@@ -8,7 +8,8 @@ public class Publisher {
     private String name;
     private String country;
 
-    public Publisher() {
+    public Publisher(long id) {
+        this.id=id;
     }
 
     public Publisher(long id, String name, String country) {

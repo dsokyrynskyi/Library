@@ -1,7 +1,5 @@
 package com.softserveinc.dsoky.resources;
 
-import com.softserveinc.dsoky.api.Book;
-import com.softserveinc.dsoky.dao.BookDAO;
 import com.softserveinc.dsoky.dto.BookDTO;
 import com.softserveinc.dsoky.exceptions.NoSuchBookException;
 import com.softserveinc.dsoky.service.BookService;
@@ -60,21 +58,22 @@ public class BooksResource {
         return bookService.getDTOByName(name);
     }
 
-    /*@POST
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void saveBook(BookDTO book) {
         bookService.saveDTO(book);
-    }*/
+    }
+
+    @PUT
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateBook(BookDTO bookDTO) {
+        bookService.update(bookDTO);
+    }
 
     @DELETE
     @Path("{id}")
     public void removeBook(@PathParam("id") long id) {
         bookService.remove(id);
-    }
-
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void updateBook(BookDTO bookDTO) {
-        bookService.update(bookDTO);
     }
 }

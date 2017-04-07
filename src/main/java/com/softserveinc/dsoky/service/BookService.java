@@ -6,6 +6,7 @@ import com.softserveinc.dsoky.exceptions.NoSuchBookException;
 import com.softserveinc.dsoky.mappers.BookMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,7 +48,13 @@ public class BookService {
         bookDAO.remove(id);
     }
 
+    @Transactional
     public void update(BookDTO bookDTO) {
         bookDAO.update(bookMapper.convertToEntity(bookDTO));
+    }
+
+    @Transactional
+    public void saveDTO(BookDTO bookDTO) {
+        bookDAO.save(bookMapper.convertToEntity(bookDTO));
     }
 }

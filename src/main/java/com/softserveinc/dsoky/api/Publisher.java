@@ -17,4 +17,9 @@ public class Publisher {
         this.name = name;
         this.country = country;
     }
+
+    public Publisher(String name, String country) {
+        this.name = name;
+        this.country = country;
+    }
 }

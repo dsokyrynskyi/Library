@@ -7,12 +7,13 @@ import com.softserveinc.dsoky.dao.AuthorDAO;
 import com.softserveinc.dsoky.dao.PublisherDAO;
 import com.softserveinc.dsoky.dto.BookDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class BookMapper {
 
     private final PublisherDAO publisherDAO;
@@ -24,7 +25,7 @@ public class BookMapper {
         this.authorDAO = authorDAO;
     }
 
-    public BookDTO convertToDTO(Book book){
+    public BookDTO convertToDTO(Book book) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         BookDTO bookDTO = new BookDTO();
@@ -42,7 +43,7 @@ public class BookMapper {
         return bookDTO;
     }
 
-    public Book convertToEntity(BookDTO bookDTO){
+    public Book convertToEntity(BookDTO bookDTO) {
         Book book = new Book();
         book.setId(bookDTO.getId());
         book.setName(bookDTO.getName());
@@ -51,9 +52,9 @@ public class BookMapper {
         book.setPublishDate(LocalDate.parse(bookDTO.getPublishDate()));
         book.setPublisher(publisherDAO.get(bookDTO.getPublisher()));
         book.setAuthors(bookDTO.getAuthors()
-                        .stream()
-                        .map(authorDAO::get)
-                        .collect(Collectors.toList())
+                .stream()
+                .map(authorDAO::get)
+                .collect(Collectors.toList())
         );
         return book;
     }

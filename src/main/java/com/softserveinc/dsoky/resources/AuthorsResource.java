@@ -1,7 +1,8 @@
 package com.softserveinc.dsoky.resources;
 
-import com.softserveinc.dsoky.api.Author;
 import com.softserveinc.dsoky.dao.AuthorDAO;
+import com.softserveinc.dsoky.dto.AuthorDTO;
+import com.softserveinc.dsoky.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +13,8 @@ import java.util.List;
 /**
  GET     /authors/
  POST    /authors/
- PUT     /authors/
- GET     /authors/title/{name}
+ PUT     /authors/{id}
+ GET     /authors/title?name={name}
  DELETE  /authors/{id}
  GET     /authors/{id}
  */
@@ -22,48 +23,49 @@ import java.util.List;
 @Path("/authors/")
 public class AuthorsResource {
 
-    private final AuthorDAO authorDAO;
+    private final AuthorService  authorService;
 
     @Autowired
-    public AuthorsResource(AuthorDAO authorDAO) {
-        this.authorDAO = authorDAO;
+    public AuthorsResource(AuthorDAO authorDAO, AuthorService authorService) {
+        this.authorService = authorService;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Author> fetchAll() {
-        return authorDAO.getAll();
+    public List<AuthorDTO> fetchAll() {
+        return authorService.getAllDTOs();
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Author fetchAuthor(@PathParam("id") long id) {
-        return authorDAO.get(id);
+    public AuthorDTO fetchAuthor(@PathParam("id") long id) {
+        return authorService.getDTO(id);
     }
 
     @GET
-    @Path("title/{name}")
+    @Path("title")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Author> fetchByName(@PathParam("name") String name) {
-        return authorDAO.getByBook(name);
+    public List<AuthorDTO> fetchByName(@QueryParam("name") String name) {
+        return authorService.getDTOByBook(name);
     }
 
-    @PUT
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void saveBook(Author author) {
-        authorDAO.save(author);
+    public void saveBook(AuthorDTO authorDTO) {
+        authorService.save(authorDTO);
     }
 
     @DELETE
     @Path("{id}")
     public void removeBook(@PathParam("id") long id) {
-        authorDAO.remove(id);
+        authorService.remove(id);
     }
 
-    @POST
+    @PUT
+    @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateBook(Author author) {
-        authorDAO.update(author);
+    public void updateBook(AuthorDTO authorDTO) {
+        authorService.update(authorDTO);
     }
 }

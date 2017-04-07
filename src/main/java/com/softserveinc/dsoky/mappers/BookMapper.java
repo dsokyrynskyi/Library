@@ -2,7 +2,6 @@ package com.softserveinc.dsoky.mappers;
 
 import com.softserveinc.dsoky.api.Author;
 import com.softserveinc.dsoky.api.Book;
-import com.softserveinc.dsoky.api.Publisher;
 import com.softserveinc.dsoky.dao.AuthorDAO;
 import com.softserveinc.dsoky.dao.PublisherDAO;
 import com.softserveinc.dsoky.dto.BookDTO;
@@ -27,14 +26,12 @@ public class BookMapper {
 
     public BookDTO convertToDTO(Book book) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
         BookDTO bookDTO = new BookDTO();
         bookDTO.setId(book.getId());
         bookDTO.setName(book.getName());
         bookDTO.setIsbn(book.getIsbn());
         bookDTO.setGenre(book.getGenre());
         bookDTO.setPublishDate(book.getPublishDate().format(formatter));
-
         bookDTO.setPublisher(book.getPublisher().getId());
         bookDTO.setAuthors(book.getAuthors()
                 .stream()

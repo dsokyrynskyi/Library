@@ -14,5 +14,5 @@ public class AuthorDTO {
     @JsonProperty("country")
     private String country;
     @JsonProperty("birthDate")
-    private LocalDate date;
+    private String date;
 }

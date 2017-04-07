@@ -22,4 +22,8 @@ public class Publisher {
         this.name = name;
         this.country = country;
     }
+
+    public Publisher() {
+
+    }
 }

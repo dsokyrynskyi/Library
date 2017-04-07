@@ -1,7 +1,7 @@
 package com.softserveinc.dsoky.resources;
 
-import com.softserveinc.dsoky.api.Publisher;
-import com.softserveinc.dsoky.dao.PublisherDAO;
+import com.softserveinc.dsoky.dto.PublisherDTO;
+import com.softserveinc.dsoky.service.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,58 +11,59 @@ import java.util.List;
 
 /**
  GET     /publishers/
- POST    /publishers/
- PUT     /publishers/
- GET     /publishers/title/{name}
- DELETE  /publishers/{id}
  GET     /publishers/{id}
+ GET     /publishers/title?name={name}
+ POST    /publishers/
+ PUT     /publishers/{id}
+ DELETE  /publishers/{id}
  * */
 
 @Component
 @Path("/publishers/")
 public class PublisherResource {
 
-    private final PublisherDAO publisherDAO;
+    private final PublisherService publisherService;
 
     @Autowired
-    public PublisherResource(PublisherDAO publisherDAO) {
-        this.publisherDAO = publisherDAO;
+    public PublisherResource(PublisherService publisherService) {
+        this.publisherService = publisherService;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Publisher> fetchAll() {
-        return publisherDAO.getAll();
+    public List<PublisherDTO> fetchAll() {
+        return publisherService.getAllDTOs();
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Publisher fetchPublisher(@PathParam("id") long id) {
-        return publisherDAO.get(id);
+    public PublisherDTO fetchPublisher(@PathParam("id") long id) {
+        return publisherService.getDTO(id);
     }
 
     @GET
-    @Path("title/{name}")
+    @Path("title")
     @Produces(MediaType.APPLICATION_JSON)
-    public Publisher fetchByName(@PathParam("name") String name) {
-        return publisherDAO.getByBook(name);
+    public PublisherDTO fetchByName(@QueryParam("name") String name) {
+        return publisherService.getDTOByBook(name);
     }
 
-    @PUT
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void savePublisher(Publisher publisher){
-        publisherDAO.save(publisher);
+    public void savePublisher(PublisherDTO publisherDTO){
+        publisherService.save(publisherDTO);
     }
 
     @DELETE
     @Path("{id}")
     public void removePublisher(@PathParam("id") long id) {
-        publisherDAO.remove(id);
+        publisherService.remove(id);
     }
 
-    @POST
+    @PUT
+    @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updatePublisher(Publisher publisher){ publisherDAO.update(publisher);
+    public void updatePublisher(PublisherDTO publisherDTO){ publisherService.update(publisherDTO);
     }
 }

@@ -26,7 +26,7 @@ public class AuthorsResource {
     private final AuthorService  authorService;
 
     @Autowired
-    public AuthorsResource(AuthorDAO authorDAO, AuthorService authorService) {
+    public AuthorsResource(AuthorService authorService) {
         this.authorService = authorService;
     }
 

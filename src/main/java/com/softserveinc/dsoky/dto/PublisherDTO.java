@@ -1,7 +1,9 @@
 package com.softserveinc.dsoky.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
+@Data
 public class PublisherDTO {
     @JsonProperty("id")
     private long id;

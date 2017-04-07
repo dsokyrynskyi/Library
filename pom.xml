@@ -21,6 +21,10 @@
         <lombok.version>1.16.16</lombok.version>
         <spring.jdbc.version>4.3.7.RELEASE</spring.jdbc.version>
         <spring.context.version>4.3.7.RELEASE</spring.context.version>
+        <spring.web.version>4.3.7.RELEASE</spring.web.version>
+        <jersey.spring.version>2.25.1</jersey.spring.version>
+        <junit.version>4.12</junit.version>
+        <mockito.version>1.10.19</mockito.version>
     </properties>
 
     <dependencies>
@@ -60,22 +64,34 @@
             <artifactId>spring-context</artifactId>
             <version>${spring.context.version}</version>
         </dependency>
-        <!--Commons-dbcp -->
+        <!--Commons-dbcp-->
         <dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
             <version>1.4</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
+        <!--Spring-web-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>4.3.7.RELEASE</version>
+            <version>${spring.web.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.ext</groupId>
             <artifactId>jersey-spring3</artifactId>
-            <version>2.25.1</version>
+            <version>${jersey.spring.version}</version>
+        </dependency>
+        <!--JUnit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+        <!--Mockito-->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
         </dependency>
     </dependencies>
 

@@ -11,13 +11,14 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
- GET     /books/
- POST    /books/
- PUT     /books/
- GET     /books/author/{id}
- GET     /books/title/{name}
- DELETE  /books/{id}
- GET     /books/{id}
+ GET     /books/                - get all books
+ POST    /books/                - add new book
+ PUT     /books/{id}            - update existing book
+ DELETE  /books/{id}            - remove existing book
+
+ GET     /books/{id}            - get book with certain id
+ GET     /books/author?id={id}     - get books of certain author
+ GET     /books/title?name={name}    - get book with certain title
  */
 
 @Component
@@ -45,16 +46,16 @@ public class BooksResource {
     }
 
     @GET
-    @Path("author/{id}")
+    @Path("author")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<BookDTO> fetchByAuthor(@PathParam("id") long authorId) {
+    public List<BookDTO> fetchByAuthor(@QueryParam("id") long authorId) {
         return bookService.getDTOByAuthor(authorId);
     }
 
     @GET
-    @Path("title/{name}")
+    @Path("title")
     @Produces(MediaType.APPLICATION_JSON)
-    public BookDTO fetchByName(@PathParam("name") String name) throws NoSuchBookException {
+    public BookDTO fetchByName(@QueryParam("name") String name) throws NoSuchBookException {
         return bookService.getDTOByName(name);
     }
 

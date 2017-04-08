@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ public class BookRepository implements BookDAO {
     }
 
     @Override
-    public Book getByName(String name) throws NoSuchBookException {
+    public Book getByName(String name){
         final String sql = "select * from \"Book\"\n" +
                 "inner join \"Books_Authors\" on \"Books_Authors\".book_id=\"Book\".book_id\n" +
                 "where \"Book\".name = :name";
@@ -114,10 +113,9 @@ public class BookRepository implements BookDAO {
         final String sqlBook = "INSERT INTO \"Book\" (name, isbn, publish_date, genre, publisher) VALUES (:bookName, :bookIsbn, :bookDate, :bookGenre, :publisherId)";
         final String sqlBookAuth = "INSERT INTO \"Books_Authors\" VALUES (:bookId, :authId)";
         long insertedId = insertBookFields(book, sqlBook);
-        if (book.getAuthors() != null)
-            book.getAuthors().stream()
-            .map(Author::getId)
-            .forEach(authId -> insertBooksAuthors(sqlBookAuth, insertedId, authId));
+        book.getAuthors().stream()
+                .map(Author::getId)
+                .forEach(authId -> insertBooksAuthors(sqlBookAuth, insertedId, authId));
     }
 
     private long insertBookFields(Book book, String sqlBook) {

@@ -41,7 +41,7 @@ public class BooksResource {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public BookDTO fetchBook(@PathParam("id") long id) throws NoSuchBookException {
+    public BookDTO fetchBook(@PathParam("id") long id){
         return bookService.getBookDTO(id);
     }
 

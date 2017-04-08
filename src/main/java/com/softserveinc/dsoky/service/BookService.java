@@ -29,7 +29,7 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
-    public BookDTO getBookDTO(long id) throws NoSuchBookException {
+    public BookDTO getBookDTO(long id){
         return bookMapper.convertToDTO(bookDAO.get(id));
     }
 

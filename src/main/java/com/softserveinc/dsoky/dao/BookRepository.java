@@ -58,7 +58,10 @@ public class BookRepository implements BookDAO {
                 "(select \"Books_Authors\".book_id from \"Books_Authors\"\n" +
                 "where author_id = :authorId)";
         SqlParameterSource param = new MapSqlParameterSource("authorId", id);
-        return getWithoutCartesianProduct(sql, param);
+        List<Book> books = getWithoutCartesianProduct(sql, param);
+        if (books.isEmpty())
+            throw new NoSuchBookException("There are not any books with AUTHOR ID = " + id);
+        return books;
     }
 
     @Override

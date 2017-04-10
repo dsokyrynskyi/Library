@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
@@ -31,22 +32,20 @@ public class PublisherResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<PublisherDTO> fetchAll() {
-        return publisherService.getAllDTOs();
+    public Response fetchAll() {
+        return Response.ok(publisherService.getAllDTOs())
+                .link("http://localhost:8080/authors", "authors")
+                .link("http://localhost:8080/books", "books")
+                .build();
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public PublisherDTO fetchPublisher(@PathParam("id") long id) {
-        return publisherService.getDTO(id);
-    }
-
-    @GET
-    @Path("title")
-    @Produces(MediaType.APPLICATION_JSON)
-    public PublisherDTO fetchByName(@QueryParam("name") String name) {
-        return publisherService.getDTOByBook(name);
+    public Response fetchPublisher(@PathParam("id") long id) {
+        return Response.ok(publisherService.getDTO(id))
+                .link("http://localhost:8080/publishers/"+id+"/books", "books")
+                .build();
     }
 
     @POST
@@ -66,4 +65,11 @@ public class PublisherResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public void updatePublisher(PublisherDTO publisherDTO){ publisherService.update(publisherDTO);
     }
+
+   /* @GET
+    @Path("title")
+    @Produces(MediaType.APPLICATION_JSON)
+    public PublisherDTO fetchByName(@QueryParam("name") String name) {
+        return publisherService.getDTOByBook(name);
+    }*/
 }

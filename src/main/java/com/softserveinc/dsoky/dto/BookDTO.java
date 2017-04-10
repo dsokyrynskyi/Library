@@ -3,11 +3,8 @@ package com.softserveinc.dsoky.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
-public class BookDTO {
+public class BookDTO{
     @JsonProperty("id")
     private long id;
     @JsonProperty("name")
@@ -18,9 +15,4 @@ public class BookDTO {
     private String publishDate;
     @JsonProperty("genre")
     private String genre;
-
-    @JsonProperty("publisherId")
-    private long publisher;
-    @JsonProperty("authorsIds")
-    private List<Long> authors = new ArrayList<>();
 }

@@ -11,6 +11,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+/**
+ GET     /v1/authors/
+ POST    /v1/authors/
+ DELETE  /v1/authors/{id}
+ GET     /v1/authors/{id}
+ PUT     /v1/authors/{id}
+ GET     /v1/books/{id}/authors
+ * */
+
 @Component
 @Path("v1/")
 public class AuthorsResource {

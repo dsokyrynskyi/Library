@@ -10,6 +10,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+/**
+ GET     /v1/publishers/
+ POST    /v1/publishers/
+ DELETE  /v1/publishers/{id}
+ GET     /v1/publishers/{id}
+ PUT     /v1/publishers/{id}
+ GET     /v1/books/{id}/publisher
+ * */
+
 @Component
 @Path("v1/")
 public class PublisherResource {

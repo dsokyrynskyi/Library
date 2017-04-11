@@ -1,6 +1,7 @@
 package com.softserveinc.dsoky.dao;
 
 import com.softserveinc.dsoky.api.Author;
+import com.softserveinc.dsoky.exceptions.NoSuchAuthorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class AuthorRepository implements AuthorDAO {
@@ -35,13 +37,16 @@ public class AuthorRepository implements AuthorDAO {
     public Author get(long id) {
         final String sql = "SELECT * FROM \"Author\" where author_id = :id";
         SqlParameterSource param = new MapSqlParameterSource("id", id);
-        return jdbcTemplate.queryForObject(sql, param, (rs, rowNum) ->
+        List<Author> authors = jdbcTemplate.query(sql, param, (rs, rowNum) ->
                 new Author(
                         rs.getInt("author_id"),
                         rs.getString("name"),
                         rs.getString("country"),
                         rs.getDate("birth_date").toLocalDate())
         );
+        if(authors.isEmpty())
+            throw new NoSuchAuthorException("There are not any authors with ID="+id);
+        return authors.get(0);
     }
 
     @Override
@@ -50,13 +55,16 @@ public class AuthorRepository implements AuthorDAO {
                 "inner join \"Books_Authors\" on \"Books_Authors\".author_id = \"Author\".author_id\n" +
                 "where \"Books_Authors\".book_id = :bookId";
         SqlParameterSource param = new MapSqlParameterSource("bookId", bookId);
-        return jdbcTemplate.query(sql, param, (rs, rowNum) ->
+        List<Author> authors = jdbcTemplate.query(sql, param, (rs, rowNum) ->
                 new Author(
                         rs.getInt("author_id"),
                         rs.getString("name"),
                         rs.getString("country"),
                         rs.getDate("birth_date").toLocalDate())
         );
+        if(authors.isEmpty())
+            throw new NoSuchAuthorException("There are not any authors with Book ID="+bookId);
+        return authors;
     }
 
     @Override

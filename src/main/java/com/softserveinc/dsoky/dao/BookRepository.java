@@ -69,12 +69,15 @@ public class BookRepository implements BookDAO {
         final String sql = "select * from \"Book\" \n" +
                 "where publisher = :publisherId";
         SqlParameterSource param = new MapSqlParameterSource("publisherId", id);
-        return jdbcTemplate.query(sql, param, (rs, rowNum) -> new Book(
+        List<Book> books =  jdbcTemplate.query(sql, param, (rs, rowNum) -> new Book(
                 rs.getLong("book_id"),
                 rs.getString("name"),
                 rs.getString("isbn"),
                 rs.getDate("publish_date").toLocalDate(),
                 rs.getString("genre")));
+        if (books.isEmpty())
+            throw new NoSuchBookException("There are not any books with PUBLISHER ID = " + id);
+        return books;
     }
 
     private List<Book> getWithoutCartesianProduct(String sql, SqlParameterSource param) {

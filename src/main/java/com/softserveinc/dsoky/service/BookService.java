@@ -44,6 +44,7 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void remove(long id) {
         bookDAO.remove(id);
     }

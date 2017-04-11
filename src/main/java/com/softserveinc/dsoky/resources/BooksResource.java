@@ -84,4 +84,11 @@ public class BooksResource {
     public List<BookDTO> getBooksOfPublisher(@PathParam("id") long id){
         return bookService.getDTOByPublisher(id);
     }
+
+    @GET
+    @Path("/books/byName")
+    @Produces(MediaType.APPLICATION_JSON)
+    public BookDTO getBookByName(@QueryParam("title") String title){
+        return bookService.getBookDTOByName(title);
+    }
 }

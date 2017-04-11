@@ -170,15 +170,20 @@ public class BookRepository implements BookDAO {
                 .forEach(params -> jdbcTemplate.update(insSql, params));
     }
 
-    /*@Override
+    @Override
     public Book getByName(String name){
         final String sql = "select * from \"Book\"\n" +
-                "inner join \"Books_Authors\" on \"Books_Authors\".book_id=\"Book\".book_id\n" +
-                "where \"Book\".name = :name";
+                "where name = :name";
         SqlParameterSource param = new MapSqlParameterSource("name", name);
-        List<Book> books = getWithoutCartesianProduct(sql, param);
+        List<Book> books = jdbcTemplate.query(sql, param, (rs, rowNum) ->  new Book(
+                rs.getLong("book_id"),
+                rs.getString("name"),
+                rs.getString("isbn"),
+                rs.getDate("publish_date").toLocalDate(),
+                rs.getString("genre"))
+        );
         if (books.isEmpty())
             throw new NoSuchBookException("There are not any books with title = " + name);
         return books.get(0);
-    }*/
+    }
 }

@@ -58,4 +58,8 @@ public class BookService {
     public void saveDTO(BookDTO bookDTO) {
         bookDAO.save(bookMapper.convertToEntity(bookDTO));
     }
+
+    public BookDTO getBookDTOByName(String bookName) {
+        return bookMapper.convertToDTO(bookDAO.getByName(bookName));
+    }
 }

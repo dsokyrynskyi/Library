@@ -10,6 +10,7 @@ public interface BookDAO {
     List<Book> getByAuthor(long authorId);
     List<Book> getByPublisher(long id);
     Book get(long id) throws NoSuchBookException;
+    Book getByName(String name);
     void remove(long id);
     void save(Book book);
     void update(Book book);

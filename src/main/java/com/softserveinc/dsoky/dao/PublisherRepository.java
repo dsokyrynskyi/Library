@@ -43,17 +43,17 @@ public class PublisherRepository implements PublisherDAO {
     }
 
     @Override
-    public Publisher getByBook(String name) {
+    public Publisher getByBook(long id) {
         final String sql = "select * from \"Publisher\"\n" +
-                "inner join \"Book\" on \"Book\".publisher = publisher_id \n" +
-                "where \"Book\".name = :bookName";
-        SqlParameterSource param = new MapSqlParameterSource("bookName", name);
+                "inner join \"Book\" on \"Book\".publisher = \"Publisher\".publisher_id  \n" +
+                "where \"Book\".book_id = :id";
+        SqlParameterSource param = new MapSqlParameterSource("id", id);
         return jdbcTemplate.queryForObject(sql, param, (rs, rowNum) ->
                 new Publisher(
                         rs.getInt("publisher_id"),
                         rs.getString("name"),
                         rs.getString("country")
-        ));
+                ));
     }
 
     @Override
@@ -79,4 +79,18 @@ public class PublisherRepository implements PublisherDAO {
                 .addValue("country", publisher.getCountry());
         jdbcTemplate.update(sql, params);
     }
+
+    /*@Override
+    public Publisher getByBook(String name) {
+        final String sql = "select * from \"Publisher\"\n" +
+                "inner join \"Book\" on \"Book\".publisher = publisher_id \n" +
+                "where \"Book\".name = :bookName";
+        SqlParameterSource param = new MapSqlParameterSource("bookName", name);
+        return jdbcTemplate.queryForObject(sql, param, (rs, rowNum) ->
+                new Publisher(
+                        rs.getInt("publisher_id"),
+                        rs.getString("name"),
+                        rs.getString("country")
+                ));
+    }*/
 }

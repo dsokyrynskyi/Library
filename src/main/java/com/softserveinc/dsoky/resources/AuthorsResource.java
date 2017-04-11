@@ -11,15 +11,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-/**
- GET     /authors/
- POST    /authors/
- PUT     /authors/{id}
- GET     /authors/title?name={name}
- DELETE  /authors/{id}
- GET     /authors/{id}
- */
-
 @Component
 @Path("v1/")
 public class AuthorsResource {
@@ -36,8 +27,8 @@ public class AuthorsResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchAll() {
         return Response.ok(authorService.getAllDTOs())
-                .link("http://localhost:8080/books", "books")
-                .link("http://localhost:8080/publishers", "publishers")
+                .link("http://localhost:8080/v1/books", "books")
+                .link("http://localhost:8080/v1/publishers", "publishers")
                 .build();
     }
 
@@ -46,7 +37,7 @@ public class AuthorsResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchAuthor(@PathParam("id") long id) {
         return Response.ok(authorService.getDTO(id))
-                .link("http://localhost:8080/authors/"+id+"/books", "books")
+                .link("http://localhost:8080/v1/authors/"+id+"/books", "books")
                 .build();
     }
 
@@ -70,17 +61,10 @@ public class AuthorsResource {
         authorService.update(authorDTO);
     }
 
-    /*@GET
-    @Path("title")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<AuthorDTO> fetchByName(@QueryParam("name") String name) {
-        return authorService.getDTOByBook(name);
-    }*/
-
     @GET
-    @Path("/books/{name}/authors")
+    @Path("/books/{id}/authors")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<AuthorDTO> getBooksOfAuthor(@PathParam("name") String name){
-        return authorService.getDTOByBook(name);
+    public List<AuthorDTO> getAuthorsOfBook(@PathParam("id") long id){
+        return authorService.getDTOByBook(id);
     }
 }

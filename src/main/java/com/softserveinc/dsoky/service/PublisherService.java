@@ -31,8 +31,8 @@ public class PublisherService {
         return publisherMapper.convertToDTO(publisherDAO.get(id));
     }
 
-    public PublisherDTO getDTOByBook(String name) {
-        return publisherMapper.convertToDTO(publisherDAO.getByBook(name));
+    public PublisherDTO getDTOByBook(long id) {
+        return publisherMapper.convertToDTO(publisherDAO.getByBook(id));
     }
 
     public void save(PublisherDTO publisherDTO) {

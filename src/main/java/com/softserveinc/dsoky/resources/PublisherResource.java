@@ -10,17 +10,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-/**
- GET     /publishers/
- GET     /publishers/{id}
- GET     /publishers/title?name={name}
- POST    /publishers/
- PUT     /publishers/{id}
- DELETE  /publishers/{id}
- * */
-
 @Component
-@Path("/publishers/")
+@Path("v1/")
 public class PublisherResource {
 
     private final PublisherService publisherService;
@@ -31,45 +22,48 @@ public class PublisherResource {
     }
 
     @GET
+    @Path("publishers/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchAll() {
         return Response.ok(publisherService.getAllDTOs())
-                .link("http://localhost:8080/authors", "authors")
-                .link("http://localhost:8080/books", "books")
+                .link("http://localhost:8080/v1/authors", "authors")
+                .link("http://localhost:8080/v1/books", "books")
                 .build();
     }
 
     @GET
-    @Path("{id}")
+    @Path("publishers/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchPublisher(@PathParam("id") long id) {
         return Response.ok(publisherService.getDTO(id))
-                .link("http://localhost:8080/publishers/"+id+"/books", "books")
+                .link("http://localhost:8080/v1/publishers/" + id + "/books", "books")
                 .build();
     }
 
     @POST
+    @Path("publishers/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void savePublisher(PublisherDTO publisherDTO){
+    public void savePublisher(PublisherDTO publisherDTO) {
         publisherService.save(publisherDTO);
     }
 
     @DELETE
-    @Path("{id}")
+    @Path("publishers/{id}")
     public void removePublisher(@PathParam("id") long id) {
         publisherService.remove(id);
     }
 
     @PUT
-    @Path("{id}")
+    @Path("publishers/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updatePublisher(PublisherDTO publisherDTO){ publisherService.update(publisherDTO);
+    public void updatePublisher(PublisherDTO publisherDTO) {
+        publisherService.update(publisherDTO);
     }
 
-   /* @GET
-    @Path("title")
+    @GET
+    @Path("books/{id}/publisher")
     @Produces(MediaType.APPLICATION_JSON)
-    public PublisherDTO fetchByName(@QueryParam("name") String name) {
-        return publisherService.getDTOByBook(name);
-    }*/
+    public PublisherDTO getPublisherOfBook(@PathParam("id") long id){
+        return publisherService.getDTOByBook(id);
+    }
 }

@@ -1,6 +1,5 @@
 package com.softserveinc.dsoky.service;
 
-import com.softserveinc.dsoky.api.Author;
 import com.softserveinc.dsoky.dao.AuthorDAO;
 import com.softserveinc.dsoky.dto.AuthorDTO;
 import com.softserveinc.dsoky.mappers.AuthorMapper;
@@ -34,8 +33,8 @@ public class AuthorService {
         return authorMapper.convertToDTO(authorDAO.get(id));
     }
 
-    public List<AuthorDTO> getDTOByBook(String name) {
-        return authorDAO.getByBook(name)
+    public List<AuthorDTO> getDTOByBook(long id) {
+        return authorDAO.getByBook(id)
                 .stream()
                 .map(authorMapper::convertToDTO)
                 .collect(Collectors.toList());

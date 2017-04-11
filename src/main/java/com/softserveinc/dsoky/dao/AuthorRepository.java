@@ -45,12 +45,11 @@ public class AuthorRepository implements AuthorDAO {
     }
 
     @Override
-    public List<Author> getByBook(String book) {
+    public List<Author> getByBook(long bookId) {
         final String sql = "select * from \"Author\" \n" +
                 "inner join \"Books_Authors\" on \"Books_Authors\".author_id = \"Author\".author_id\n" +
-                "inner join \"Book\" on \"Book\".book_id = \"Books_Authors\".book_id\n" +
-                "where \"Book\".name = :bookName";
-        SqlParameterSource param = new MapSqlParameterSource("bookName", book);
+                "where \"Books_Authors\".book_id = :bookId";
+        SqlParameterSource param = new MapSqlParameterSource("bookId", bookId);
         return jdbcTemplate.query(sql, param, (rs, rowNum) ->
                 new Author(
                         rs.getInt("author_id"),

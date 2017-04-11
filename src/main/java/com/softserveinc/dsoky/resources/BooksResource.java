@@ -10,17 +10,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-/**
- * GET     /books/                - get all books
- * POST    /books/                - add new book
- * PUT     /books/{id}            - update existing book
- * DELETE  /books/{id}            - remove existing book
- * <p>
- * GET     /books/{id}            - get book with certain id
- * GET     /books/author?id={id}     - get books of certain author
- * GET     /books/title?name={name}    - get book with certain title
- */
-
 @Component
 @Path("v1/")
 public class BooksResource {
@@ -37,8 +26,8 @@ public class BooksResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchAll() {
         return Response.ok(bookService.getAllBookDTOs())
-                .link("http://localhost:8080/authors", "authors")
-                .link("http://localhost:8080/publishers", "publishers")
+                .link("http://localhost:8080/v1/authors", "authors")
+                .link("http://localhost:8080/v1/publishers", "publishers")
                 .build();
     }
 
@@ -47,8 +36,8 @@ public class BooksResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchBook(@PathParam("id") long id) {
         return Response.ok(bookService.getBookDTO(id))
-                .link("http://localhost:8080/books/"+id+"/authors", "authors")
-                .link("http://localhost:8080/books/"+id+"/publisher", "publisher")
+                .link("http://localhost:8080/v1/books/"+id+"/authors", "authors")
+                .link("http://localhost:8080/v1/books/"+id+"/publisher", "publisher")
                 .build();
     }
 
@@ -72,24 +61,17 @@ public class BooksResource {
         bookService.remove(id);
     }
 
-    /*@GET
-    @Path("/authors/books")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<BookDTO> fetchByAuthor(@QueryParam("id") long authorId) {
-        return bookService.getDTOByAuthor(authorId);
-    }
-
-    @GET
-    @Path("title")
-    @Produces(MediaType.APPLICATION_JSON)
-    public BookDTO fetchByName(@QueryParam("name") String name) throws NoSuchBookException {
-        return bookService.getDTOByName(name);
-    }*/
-
     @GET
     @Path("/authors/{id}/books")
     @Produces(MediaType.APPLICATION_JSON)
     public List<BookDTO> getBooksOfAuthor(@PathParam("id") long id){
         return bookService.getDTOByAuthor(id);
+    }
+
+    @GET
+    @Path("/publishers/{id}/books")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<BookDTO> getBooksOfPublisher(@PathParam("id") long id){
+        return bookService.getDTOByPublisher(id);
     }
 }

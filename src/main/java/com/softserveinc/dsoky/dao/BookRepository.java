@@ -65,15 +65,16 @@ public class BookRepository implements BookDAO {
     }
 
     @Override
-    public Book getByName(String name){
-        final String sql = "select * from \"Book\"\n" +
-                "inner join \"Books_Authors\" on \"Books_Authors\".book_id=\"Book\".book_id\n" +
-                "where \"Book\".name = :name";
-        SqlParameterSource param = new MapSqlParameterSource("name", name);
-        List<Book> books = getWithoutCartesianProduct(sql, param);
-        if (books.isEmpty())
-            throw new NoSuchBookException("There are not any books with title = " + name);
-        return books.get(0);
+    public List<Book> getByPublisher(long id) {
+        final String sql = "select * from \"Book\" \n" +
+                "where publisher = :publisherId";
+        SqlParameterSource param = new MapSqlParameterSource("publisherId", id);
+        return jdbcTemplate.query(sql, param, (rs, rowNum) -> new Book(
+                rs.getLong("book_id"),
+                rs.getString("name"),
+                rs.getString("isbn"),
+                rs.getDate("publish_date").toLocalDate(),
+                rs.getString("genre")));
     }
 
     private List<Book> getWithoutCartesianProduct(String sql, SqlParameterSource param) {
@@ -165,4 +166,16 @@ public class BookRepository implements BookDAO {
                 .map(aLong -> new MapSqlParameterSource("bookId", book.getId()).addValue("authorId", aLong))
                 .forEach(params -> jdbcTemplate.update(insSql, params));
     }
+
+    /*@Override
+    public Book getByName(String name){
+        final String sql = "select * from \"Book\"\n" +
+                "inner join \"Books_Authors\" on \"Books_Authors\".book_id=\"Book\".book_id\n" +
+                "where \"Book\".name = :name";
+        SqlParameterSource param = new MapSqlParameterSource("name", name);
+        List<Book> books = getWithoutCartesianProduct(sql, param);
+        if (books.isEmpty())
+            throw new NoSuchBookException("There are not any books with title = " + name);
+        return books.get(0);
+    }*/
 }

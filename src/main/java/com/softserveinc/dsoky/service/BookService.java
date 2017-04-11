@@ -2,7 +2,6 @@ package com.softserveinc.dsoky.service;
 
 import com.softserveinc.dsoky.dao.BookDAO;
 import com.softserveinc.dsoky.dto.BookDTO;
-import com.softserveinc.dsoky.exceptions.NoSuchBookException;
 import com.softserveinc.dsoky.mappers.BookMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,10 +38,11 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
-    public BookDTO getDTOByName(String name) throws NoSuchBookException {
-        return bookMapper.convertToDTO(bookDAO.getByName(name));
+    public List<BookDTO> getDTOByPublisher(long id) {
+        return bookDAO.getByPublisher(id).stream()
+                .map(bookMapper::convertToDTO)
+                .collect(Collectors.toList());
     }
-
 
     public void remove(long id) {
         bookDAO.remove(id);

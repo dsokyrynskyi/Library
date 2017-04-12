@@ -82,7 +82,8 @@ public class BooksResource {
     @Path("/books/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateBook(RichBookDTO bookDTO) {
+    public Response updateBook(RichBookDTO bookDTO, @PathParam("id") long bookId) {
+        bookDTO.setId(bookId);
         bookService.update(bookDTO);
         return Response.ok().build();
     }

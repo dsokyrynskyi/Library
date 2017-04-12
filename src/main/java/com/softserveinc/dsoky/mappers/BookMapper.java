@@ -3,7 +3,6 @@ package com.softserveinc.dsoky.mappers;
 import com.softserveinc.dsoky.api.Book;
 import com.softserveinc.dsoky.api.Publisher;
 import com.softserveinc.dsoky.dao.AuthorDAO;
-import com.softserveinc.dsoky.dao.PublisherDAO;
 import com.softserveinc.dsoky.dto.BookDTO;
 import com.softserveinc.dsoky.dto.RichBookDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +16,10 @@ import java.util.stream.Collectors;
 public class BookMapper {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd";
-    private final PublisherDAO publisherDAO;
     private final AuthorDAO authorDAO;
 
     @Autowired
-    public BookMapper(PublisherDAO publisherDAO, AuthorDAO authorDAO) {
-        this.publisherDAO = publisherDAO;
+    public BookMapper(AuthorDAO authorDAO) {
         this.authorDAO = authorDAO;
     }
 

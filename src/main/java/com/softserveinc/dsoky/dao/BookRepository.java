@@ -3,8 +3,12 @@ package com.softserveinc.dsoky.dao;
 import com.softserveinc.dsoky.api.Author;
 import com.softserveinc.dsoky.api.Book;
 import com.softserveinc.dsoky.api.Publisher;
+import com.softserveinc.dsoky.exceptions.CreateResourceException;
 import com.softserveinc.dsoky.exceptions.NoSuchLibraryResourceException;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -18,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Repository
 public class BookRepository implements BookDAO {
@@ -133,7 +139,12 @@ public class BookRepository implements BookDAO {
                 .addValue("bookGenre", book.getGenre())
                 .addValue("publisherId", book.getPublisher().getId());
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(sqlBook, paramsBook, keyHolder, new String[]{"book_id"});
+        try {
+            jdbcTemplate.update(sqlBook, paramsBook, keyHolder, new String[]{"book_id"});
+        }catch (DataIntegrityViolationException e){
+            String message = e.getMostSpecificCause().getMessage();
+            throw new CreateResourceException(message.substring(message.indexOf("Detail:")+8, message.length()));
+        }
         return keyHolder.getKey().longValue();
     }
 
@@ -157,7 +168,12 @@ public class BookRepository implements BookDAO {
                 .addValue("genre", book.getGenre())
                 .addValue("publisher", book.getPublisher().getId())
                 .addValue("date", book.getPublishDate());
-        jdbcTemplate.update(sql, params);
+        try {
+            jdbcTemplate.update(sql, params);
+        }catch (DataIntegrityViolationException e){
+            String message = e.getMostSpecificCause().getMessage();
+            throw new CreateResourceException(message.substring(message.indexOf("Detail:")+8, message.length()));
+        }
     }
 
     private void updateBooksAuthorsFields(Book book) {

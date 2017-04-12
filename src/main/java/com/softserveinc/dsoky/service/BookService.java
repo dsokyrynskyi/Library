@@ -2,6 +2,7 @@ package com.softserveinc.dsoky.service;
 
 import com.softserveinc.dsoky.dao.BookDAO;
 import com.softserveinc.dsoky.dto.BookDTO;
+import com.softserveinc.dsoky.dto.RichBookDTO;
 import com.softserveinc.dsoky.mappers.BookMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,12 +51,12 @@ public class BookService {
     }
 
     @Transactional
-    public void update(BookDTO bookDTO) {
+    public void update(RichBookDTO bookDTO) {
         bookDAO.update(bookMapper.convertToEntity(bookDTO));
     }
 
     @Transactional
-    public void saveDTO(BookDTO bookDTO) {
+    public void saveDTO(RichBookDTO bookDTO) {
         bookDAO.save(bookMapper.convertToEntity(bookDTO));
     }
 

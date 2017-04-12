@@ -1,14 +1,17 @@
 package com.softserveinc.dsoky.mappers;
 
 import com.softserveinc.dsoky.api.Book;
+import com.softserveinc.dsoky.api.Publisher;
 import com.softserveinc.dsoky.dao.AuthorDAO;
 import com.softserveinc.dsoky.dao.PublisherDAO;
 import com.softserveinc.dsoky.dto.BookDTO;
+import com.softserveinc.dsoky.dto.RichBookDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 
 @Component
 public class BookMapper {
@@ -41,6 +44,20 @@ public class BookMapper {
         book.setIsbn(bookDTO.getIsbn());
         book.setGenre(bookDTO.getGenre());
         book.setPublishDate(LocalDate.parse(bookDTO.getPublishDate()));
+        return book;
+    }
+
+    public Book convertToEntity(RichBookDTO bookDTO) {
+        Book book = new Book();
+        book.setId(bookDTO.getId());
+        book.setName(bookDTO.getName());
+        book.setIsbn(bookDTO.getIsbn());
+        book.setGenre(bookDTO.getGenre());
+        book.setPublishDate(LocalDate.parse(bookDTO.getPublishDate()));
+        book.setPublisher(new Publisher(bookDTO.getPublisher()));
+        book.setAuthors(bookDTO.getAuthors().stream()
+                .map(authorDAO::get)
+                .collect(Collectors.toList()));
         return book;
     }
 }

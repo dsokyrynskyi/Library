@@ -1,6 +1,7 @@
 package com.softserveinc.dsoky.resources;
 
 import com.softserveinc.dsoky.dto.BookDTO;
+import com.softserveinc.dsoky.dto.RichBookDTO;
 import com.softserveinc.dsoky.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -71,15 +72,19 @@ public class BooksResource {
     @POST
     @Path("/books/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void saveBook(BookDTO book) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response saveBook(RichBookDTO book) {
         bookService.saveDTO(book);
+        return Response.ok().build();
     }
 
     @PUT
     @Path("/books/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateBook(BookDTO bookDTO) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateBook(RichBookDTO bookDTO) {
         bookService.update(bookDTO);
+        return Response.ok().build();
     }
 
     @DELETE

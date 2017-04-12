@@ -37,16 +37,6 @@ public class BookMapper {
         return bookDTO;
     }
 
-    public Book convertToEntity(BookDTO bookDTO) {
-        Book book = new Book();
-        book.setId(bookDTO.getId());
-        book.setName(bookDTO.getName());
-        book.setIsbn(bookDTO.getIsbn());
-        book.setGenre(bookDTO.getGenre());
-        book.setPublishDate(LocalDate.parse(bookDTO.getPublishDate()));
-        return book;
-    }
-
     public Book convertToEntity(RichBookDTO bookDTO) {
         Book book = new Book();
         book.setId(bookDTO.getId());

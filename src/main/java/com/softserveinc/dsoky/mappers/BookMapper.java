@@ -40,7 +40,11 @@ public class BookMapper {
         book.setName(bookDTO.getName());
         book.setIsbn(bookDTO.getIsbn());
         book.setGenre(bookDTO.getGenre());
-        book.setPublishDate(LocalDate.parse(bookDTO.getPublishDate()));
+
+        String publishDate = bookDTO.getPublishDate();
+        if(publishDate != null)
+            book.setPublishDate(LocalDate.parse(publishDate));
+
         book.setPublisher(new Publisher(bookDTO.getPublisher()));
         book.setAuthors(bookDTO.getAuthors().stream()
                 .map(authorDAO::get)

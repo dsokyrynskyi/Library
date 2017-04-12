@@ -5,9 +5,12 @@ import com.softserveinc.dsoky.service.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
 import java.util.List;
 
 /**
@@ -23,6 +26,7 @@ import java.util.List;
 @Path("v1/")
 public class PublisherResource {
 
+    private URI uri;
     private final PublisherService publisherService;
 
     @Autowired
@@ -30,13 +34,24 @@ public class PublisherResource {
         this.publisherService = publisherService;
     }
 
+    @PostConstruct
+    public void init(){
+        uri = UriBuilder.fromPath("http://{host}:{port}/{version}/")
+                .resolveTemplate("host", "localhost")
+                .resolveTemplate("port", "8080")
+                .resolveTemplate("version", "v1")
+                .build();
+    }
+
     @GET
     @Path("publishers/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchAll() {
+        URI booksUri = uri.resolve("/books");
+        URI authorsUri = uri.resolve("/authors");
         return Response.ok(publisherService.getAllDTOs())
-                .link("http://localhost:8080/v1/authors", "authors")
-                .link("http://localhost:8080/v1/books", "books")
+                .link(booksUri, "books")
+                .link(authorsUri, "authors")
                 .build();
     }
 
@@ -44,8 +59,9 @@ public class PublisherResource {
     @Path("publishers/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchPublisher(@PathParam("id") long id) {
+        URI booksUri = uri.resolve("publishers/"+id+"/books");
         return Response.ok(publisherService.getDTO(id))
-                .link("http://localhost:8080/v1/publishers/" + id + "/books", "books")
+                .link(booksUri, "books")
                 .build();
     }
 

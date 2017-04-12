@@ -10,8 +10,10 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class AuthorMapper {
 
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
+
     public AuthorDTO convertToDTO(Author author){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         AuthorDTO authorDTO = new AuthorDTO();
         authorDTO.setId(author.getId());
         authorDTO.setName(author.getName());

@@ -1,8 +1,9 @@
 package com.softserveinc.dsoky.dao;
 
 import com.softserveinc.dsoky.api.Publisher;
-import com.softserveinc.dsoky.exceptions.NoSuchPublisherException;
+import com.softserveinc.dsoky.exceptions.NoSuchLibraryResourceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -35,15 +36,17 @@ public class PublisherRepository implements PublisherDAO {
     public Publisher get(long id) {
         final String sql = "SELECT * FROM \"Publisher\" where publisher_id = :id";
         SqlParameterSource param = new MapSqlParameterSource("id", id);
-        List<Publisher> publishers = jdbcTemplate.query(sql, param, (rs, rowNum) ->
-                new Publisher(
-                        rs.getInt("publisher_id"),
-                        rs.getString("name"),
-                        rs.getString("country")
-        ));
-        if(publishers.isEmpty())
-            throw new NoSuchPublisherException("There are not any publishers with ID="+id);
-        return publishers.get(0);
+        Publisher publisher;
+        try {
+            publisher = jdbcTemplate.queryForObject(sql, param, (rs, rowNum) ->
+                    new Publisher(
+                            rs.getInt("publisher_id"),
+                            rs.getString("name"),
+                            rs.getString("country")));
+        }catch (EmptyResultDataAccessException e){
+            throw new NoSuchLibraryResourceException("There isn't a publisher in the Library with ID = "+id);
+        }
+        return publisher;
     }
 
     @Override
@@ -52,16 +55,17 @@ public class PublisherRepository implements PublisherDAO {
                 "inner join \"Book\" on \"Book\".publisher = \"Publisher\".publisher_id  \n" +
                 "where \"Book\".book_id = :id";
         SqlParameterSource param = new MapSqlParameterSource("id", id);
-        List<Publisher> publishers = jdbcTemplate.query(sql, param, (rs, rowNum) ->
-                new Publisher(
-                        rs.getInt("publisher_id"),
-                        rs.getString("name"),
-                        rs.getString("country")
-                ));
-
-        if(publishers.isEmpty())
-            throw new NoSuchPublisherException("There are not any publishers with Book ID = "+id);
-        return publishers.get(0);
+        Publisher publisher;
+        try {
+            publisher = jdbcTemplate.queryForObject(sql, param, (rs, rowNum) ->
+                    new Publisher(
+                            rs.getInt("publisher_id"),
+                            rs.getString("name"),
+                            rs.getString("country")));
+        }catch (EmptyResultDataAccessException e){
+            throw new NoSuchLibraryResourceException("There isn't a publisher in the Library with BOOK_ID = "+id);
+        }
+        return publisher;
     }
 
     @Override
@@ -87,18 +91,4 @@ public class PublisherRepository implements PublisherDAO {
                 .addValue("country", publisher.getCountry());
         jdbcTemplate.update(sql, params);
     }
-
-    /*@Override
-    public Publisher getByBook(String name) {
-        final String sql = "select * from \"Publisher\"\n" +
-                "inner join \"Book\" on \"Book\".publisher = publisher_id \n" +
-                "where \"Book\".name = :bookName";
-        SqlParameterSource param = new MapSqlParameterSource("bookName", name);
-        return jdbcTemplate.queryForObject(sql, param, (rs, rowNum) ->
-                new Publisher(
-                        rs.getInt("publisher_id"),
-                        rs.getString("name"),
-                        rs.getString("country")
-                ));
-    }*/
 }

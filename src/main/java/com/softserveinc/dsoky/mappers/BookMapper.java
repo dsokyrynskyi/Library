@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class BookMapper {
 
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
     private final PublisherDAO publisherDAO;
     private final AuthorDAO authorDAO;
 
@@ -23,7 +24,7 @@ public class BookMapper {
     }
 
     public BookDTO convertToDTO(Book book) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         BookDTO bookDTO = new BookDTO();
         bookDTO.setId(book.getId());
         bookDTO.setName(book.getName());

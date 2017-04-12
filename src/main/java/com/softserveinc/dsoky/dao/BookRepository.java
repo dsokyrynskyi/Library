@@ -3,8 +3,9 @@ package com.softserveinc.dsoky.dao;
 import com.softserveinc.dsoky.api.Author;
 import com.softserveinc.dsoky.api.Book;
 import com.softserveinc.dsoky.api.Publisher;
-import com.softserveinc.dsoky.exceptions.NoSuchBookException;
+import com.softserveinc.dsoky.exceptions.NoSuchLibraryResourceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -37,7 +38,7 @@ public class BookRepository implements BookDAO {
     }
 
     @Override
-    public Book get(long id) throws NoSuchBookException {
+    public Book get(long id) throws NoSuchLibraryResourceException {
         final String sql = "select * from \"Book\" \n" +
                 "left join \"Publisher\" on \"Book\".publisher = \"Publisher\".publisher_id\n" +
                 "left join \"Books_Authors\" on \"Books_Authors\".book_id = \"Book\".book_id\n" +
@@ -45,7 +46,7 @@ public class BookRepository implements BookDAO {
         SqlParameterSource param = new MapSqlParameterSource("id", id);
         List<Book> books = getWithoutCartesianProduct(sql, param);
         if (books.isEmpty())
-            throw new NoSuchBookException("There are not any books with ID = " + id);
+            throw new NoSuchLibraryResourceException("There are not any books with ID = " + id);
         return books.get(0);
     }
 
@@ -60,7 +61,7 @@ public class BookRepository implements BookDAO {
         SqlParameterSource param = new MapSqlParameterSource("authorId", id);
         List<Book> books = getWithoutCartesianProduct(sql, param);
         if (books.isEmpty())
-            throw new NoSuchBookException("There are not any books with AUTHOR ID = " + id);
+            throw new NoSuchLibraryResourceException("There are not any books with AUTHOR_ID = " + id);
         return books;
     }
 
@@ -76,7 +77,7 @@ public class BookRepository implements BookDAO {
                 rs.getDate("publish_date").toLocalDate(),
                 rs.getString("genre")));
         if (books.isEmpty())
-            throw new NoSuchBookException("There are not any books with PUBLISHER ID = " + id);
+            throw new NoSuchLibraryResourceException("There are not any books with PUBLISHER_ID = " + id);
         return books;
     }
 
@@ -175,15 +176,18 @@ public class BookRepository implements BookDAO {
         final String sql = "select * from \"Book\"\n" +
                 "where name = :name";
         SqlParameterSource param = new MapSqlParameterSource("name", name);
-        List<Book> books = jdbcTemplate.query(sql, param, (rs, rowNum) ->  new Book(
-                rs.getLong("book_id"),
-                rs.getString("name"),
-                rs.getString("isbn"),
-                rs.getDate("publish_date").toLocalDate(),
-                rs.getString("genre"))
-        );
-        if (books.isEmpty())
-            throw new NoSuchBookException("There are not any books with title = " + name);
-        return books.get(0);
+        Book book;
+        try{
+            book = jdbcTemplate.queryForObject(sql, param, (rs, rowNum) ->  new Book(
+                    rs.getLong("book_id"),
+                    rs.getString("name"),
+                    rs.getString("isbn"),
+                    rs.getDate("publish_date").toLocalDate(),
+                    rs.getString("genre"))
+            );
+        }catch (EmptyResultDataAccessException e){
+            throw new NoSuchLibraryResourceException("There aren't any books in the Library with NAME = "+name);
+        }
+        return book;
     }
 }

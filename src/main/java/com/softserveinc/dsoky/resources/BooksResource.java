@@ -5,9 +5,12 @@ import com.softserveinc.dsoky.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
 import java.util.List;
 
 /**
@@ -24,6 +27,7 @@ import java.util.List;
 @Path("v1/")
 public class BooksResource {
 
+    private URI uri;
     private final BookService bookService;
 
     @Autowired
@@ -31,13 +35,24 @@ public class BooksResource {
         this.bookService = bookService;
     }
 
+    @PostConstruct
+    public void init(){
+        uri = UriBuilder.fromPath("http://{host}:{port}/{version}/")
+                .resolveTemplate("host", "localhost")
+                .resolveTemplate("port", "8080")
+                .resolveTemplate("version", "v1")
+                .build();
+    }
+
     @GET
     @Path("/books/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchAll() {
+        URI publishersUri = uri.resolve("/publishers");
+        URI authorsUri = uri.resolve("/authors");
         return Response.ok(bookService.getAllBookDTOs())
-                .link("http://localhost:8080/v1/authors", "authors")
-                .link("http://localhost:8080/v1/publishers", "publishers")
+                .link(authorsUri, "authors")
+                .link(publishersUri, "publishers")
                 .build();
     }
 
@@ -45,9 +60,11 @@ public class BooksResource {
     @Path("/books/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchBook(@PathParam("id") long id) {
+        URI publisherUri = uri.resolve("books/"+id+"/publisher");
+        URI authorsUri = uri.resolve("/books/"+id+"/authors");
         return Response.ok(bookService.getBookDTO(id))
-                .link("http://localhost:8080/v1/books/"+id+"/authors", "authors")
-                .link("http://localhost:8080/v1/books/"+id+"/publisher", "publisher")
+                .link(authorsUri, "authors")
+                .link(publisherUri, "publisher")
                 .build();
     }
 

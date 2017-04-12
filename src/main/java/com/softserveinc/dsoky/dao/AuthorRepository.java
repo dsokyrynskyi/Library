@@ -1,8 +1,9 @@
 package com.softserveinc.dsoky.dao;
 
 import com.softserveinc.dsoky.api.Author;
-import com.softserveinc.dsoky.exceptions.NoSuchAuthorException;
+import com.softserveinc.dsoky.exceptions.NoSuchLibraryResourceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class AuthorRepository implements AuthorDAO {
@@ -37,16 +37,18 @@ public class AuthorRepository implements AuthorDAO {
     public Author get(long id) {
         final String sql = "SELECT * FROM \"Author\" where author_id = :id";
         SqlParameterSource param = new MapSqlParameterSource("id", id);
-        List<Author> authors = jdbcTemplate.query(sql, param, (rs, rowNum) ->
-                new Author(
-                        rs.getInt("author_id"),
-                        rs.getString("name"),
-                        rs.getString("country"),
-                        rs.getDate("birth_date").toLocalDate())
-        );
-        if(authors.isEmpty())
-            throw new NoSuchAuthorException("There are not any authors with ID="+id);
-        return authors.get(0);
+        Author author;
+        try {
+            author = jdbcTemplate.queryForObject(sql, param, (rs, rowNum) ->
+                    new Author(
+                            rs.getInt("author_id"),
+                            rs.getString("name"),
+                            rs.getString("country"),
+                            rs.getDate("birth_date").toLocalDate()));
+        }catch (EmptyResultDataAccessException e){
+            throw new NoSuchLibraryResourceException("There isn't an author in the Library with ID = "+id);
+        }
+        return author;
     }
 
     @Override
@@ -63,7 +65,7 @@ public class AuthorRepository implements AuthorDAO {
                         rs.getDate("birth_date").toLocalDate())
         );
         if(authors.isEmpty())
-            throw new NoSuchAuthorException("There are not any authors with Book ID="+bookId);
+           throw new NoSuchLibraryResourceException("There aren't any authors with BOOK_ID = "+bookId);
         return authors;
     }
 

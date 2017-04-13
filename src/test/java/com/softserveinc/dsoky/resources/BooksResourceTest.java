@@ -1,6 +1,7 @@
 package com.softserveinc.dsoky.resources;
 
 import com.softserveinc.dsoky.service.BookService;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -11,5 +12,8 @@ public class BooksResourceTest {
     @Mock
     private BookService bookService;
 
+    @Test
+    public void test(){
 
+    }
 }

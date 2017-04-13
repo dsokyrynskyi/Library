@@ -15,4 +15,14 @@ public class AuthorDTO {
     private String country;
     @JsonProperty("birthDate")
     private String date;
+
+    public AuthorDTO() {
+    }
+
+    public AuthorDTO(long id, String name, String country, String date) {
+        this.id = id;
+        this.name = name;
+        this.country = country;
+        this.date = date;
+    }
 }

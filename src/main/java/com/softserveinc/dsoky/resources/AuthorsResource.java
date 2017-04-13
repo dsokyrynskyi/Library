@@ -26,7 +26,12 @@ import java.util.List;
 public class AuthorsResource {
 
     private URI uri;
-    private final AuthorService authorService;
+
+    void setUri(URI uri) {
+        this.uri = uri;
+    }
+
+    private /*final*/ AuthorService authorService;
 
     @Autowired
     public AuthorsResource(AuthorService authorService) {

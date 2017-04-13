@@ -14,18 +14,9 @@ public class LibraryApplication extends Application<LibraryConfiguration>{
 
     @Override
     public void run(LibraryConfiguration libraryConfiguration, Environment environment) throws Exception {
-        configContext(environment);
-        configJersey(environment);
-    }
-
-    private void configContext(Environment environment) {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.scan("com.softserveinc.dsoky");
+        context.scan("com.softserveinc.dsoky");     // all spring beans
         environment.servlets().addServletListeners(new ContextLoaderListener(context));
+        environment.jersey().packages("com.softserveinc.dsoky"); // resources, exception mappers, etc.
     }
-
-    private void configJersey(Environment environment) {
-        environment.jersey().packages("com.softserveinc.dsoky");
-    }
-
 }

@@ -29,6 +29,10 @@ public class PublisherResource {
     private URI uri;
     private final PublisherService publisherService;
 
+    void setUri(URI uri) {
+        this.uri = uri;
+    }
+
     @Autowired
     public PublisherResource(PublisherService publisherService) {
         this.publisherService = publisherService;

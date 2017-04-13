@@ -1,6 +1,5 @@
 package com.softserveinc.dsoky.resources;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softserveinc.dsoky.dto.AuthorDTO;
 import com.softserveinc.dsoky.service.AuthorService;
@@ -21,7 +20,6 @@ import org.springframework.web.context.ContextLoaderListener;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,7 +41,6 @@ public class AuthorsResourceTest extends JerseyTest{
     protected TestContainerFactory getTestContainerFactory() {
         return new GrizzlyWebTestContainerFactory();
     }
-
 
     @Override
     protected DeploymentContext configureDeployment(){
@@ -94,7 +91,7 @@ public class AuthorsResourceTest extends JerseyTest{
 
     @Test
     @SuppressWarnings("unchecked")
-    public void fetchListOfAuthorsForCertainBookNameReturnsExpectedList(){
+    public void fetchListOfAuthorsForCertainBookReturnsExpectedList(){
         Response output = target("/v1/books/1/authors").request().get();
         AuthorDTO dto = objectMapper.convertValue(output.readEntity(List.class).get(0), AuthorDTO.class);
 

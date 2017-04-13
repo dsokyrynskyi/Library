@@ -11,4 +11,13 @@ public class PublisherDTO {
     private String name;
     @JsonProperty("country")
     private String country;
+
+    public PublisherDTO(long id, String name, String country) {
+        this.id = id;
+        this.name = name;
+        this.country = country;
+    }
+
+    public PublisherDTO() {
+    }
 }

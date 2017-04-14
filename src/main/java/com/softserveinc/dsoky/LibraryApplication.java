@@ -1,12 +1,9 @@
 package com.softserveinc.dsoky;
 
-import com.softserveinc.dsoky.resources.AuthorsResource;
-import com.softserveinc.dsoky.resources.BooksResource;
-import com.softserveinc.dsoky.resources.PublisherResource;
 import io.dropwizard.Application;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 
 public class LibraryApplication extends Application<LibraryConfiguration>{
@@ -17,15 +14,9 @@ public class LibraryApplication extends Application<LibraryConfiguration>{
 
     @Override
     public void run(LibraryConfiguration libraryConfiguration, Environment environment) throws Exception {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(LibrarySpringConfiguration.class);
-        environment.jersey().register(context.getBean(BooksResource.class));
-        environment.jersey().register(context.getBean(AuthorsResource.class));
-        environment.jersey().register(context.getBean(PublisherResource.class));
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.scan("com.softserveinc.dsoky");     // all spring beans
+        environment.servlets().addServletListeners(new ContextLoaderListener(context));
+        environment.jersey().packages("com.softserveinc.dsoky"); // resources, exception mappers, etc.
     }
-
-    @Override
-    public void initialize(Bootstrap<LibraryConfiguration> bootstrap) {
-        // nothing
-    }
-
 }

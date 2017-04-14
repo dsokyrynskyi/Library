@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 
 @Configuration
-@ComponentScan(basePackages = "com.softserveinc.dsoky")
+//@ComponentScan(basePackages = "com.softserveinc.dsoky")
 @EnableTransactionManagement
 public class LibrarySpringConfiguration {
     @Bean

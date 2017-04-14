@@ -34,5 +34,6 @@ public class Book {
         this.publishDate = publishDate;
         this.genre = genre;
         this.publisher = publisher;
+        this.authors = new ArrayList<>();
     }
 }

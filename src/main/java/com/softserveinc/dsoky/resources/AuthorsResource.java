@@ -27,7 +27,7 @@ public class AuthorsResource {
 
     private URI uri;
 
-    void setUri(URI uri) {
+    public void setUri(URI uri) {
         this.uri = uri;
     }
 

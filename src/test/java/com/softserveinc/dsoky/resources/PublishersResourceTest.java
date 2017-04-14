@@ -1,8 +1,8 @@
 package com.softserveinc.dsoky.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.softserveinc.dsoky.dto.AuthorDTO;
 import com.softserveinc.dsoky.dto.PublisherDTO;
+import com.softserveinc.dsoky.resources.config.PublishersResourceConfig;
 import com.softserveinc.dsoky.service.PublisherService;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.glassfish.jersey.test.DeploymentContext;
@@ -33,8 +33,6 @@ import static org.mockito.Mockito.when;
 public class PublishersResourceTest extends JerseyTest{
 
     private ObjectMapper objectMapper = new ObjectMapper();
-
-    @Mock
     private PublisherService publisherService;
 
     @Override
@@ -52,7 +50,6 @@ public class PublishersResourceTest extends JerseyTest{
                 .build();
     }
 
-    @Before
     public void beforeTesting(){
         publisherService = Mockito.mock(PublisherService.class);
         when(publisherService.getAllDTOs()).thenReturn(Collections.singletonList(new PublisherDTO(100_000L, "TEST", "Russia")));

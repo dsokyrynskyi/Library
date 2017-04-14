@@ -1,5 +1,6 @@
-package com.softserveinc.dsoky.resources;
+package com.softserveinc.dsoky.resources.config;
 
+import com.softserveinc.dsoky.resources.PublisherResource;
 import com.softserveinc.dsoky.service.PublisherService;
 import io.dropwizard.jersey.DropwizardResourceConfig;
 
@@ -9,7 +10,7 @@ public class PublishersResourceConfig extends DropwizardResourceConfig{
 
     private PublisherResource resource;
 
-    PublishersResourceConfig(PublisherService service){
+    public PublishersResourceConfig(PublisherService service){
             resource = new PublisherResource(service);
             resource.setUri(UriBuilder.fromPath("http://localhost:8080/v1/").build());
             register(resource);

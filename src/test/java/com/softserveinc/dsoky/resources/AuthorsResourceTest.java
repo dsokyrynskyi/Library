@@ -2,6 +2,7 @@ package com.softserveinc.dsoky.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softserveinc.dsoky.dto.AuthorDTO;
+import com.softserveinc.dsoky.resources.config.AuthorsResourceConfig;
 import com.softserveinc.dsoky.service.AuthorService;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.glassfish.jersey.test.DeploymentContext;
@@ -33,8 +34,6 @@ import static org.mockito.Mockito.when;
 public class AuthorsResourceTest extends JerseyTest{
 
     private ObjectMapper objectMapper = new ObjectMapper();
-
-    @Mock
     private AuthorService authorService;
 
     @Override
@@ -52,7 +51,6 @@ public class AuthorsResourceTest extends JerseyTest{
                 .build();
     }
 
-    @Before
     public void beforeTesting(){
         authorService = Mockito.mock(AuthorService.class);
         when(authorService.getDTO(1)).thenReturn(new AuthorDTO(100_000L, "Adolf", "Finland", "1990-08-08"));

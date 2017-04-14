@@ -31,6 +31,10 @@ public class BooksResource {
     private URI uri;
     private final BookService bookService;
 
+    public void setUri(URI uri) {
+        this.uri = uri;
+    }
+
     @Autowired
     public BooksResource(BookService bookService) {
         this.bookService = bookService;
@@ -111,7 +115,7 @@ public class BooksResource {
     @GET
     @Path("/books/byName")
     @Produces(MediaType.APPLICATION_JSON)
-    public BookDTO getBookByName(@QueryParam("title") String title){
-        return bookService.getBookDTOByName(title);
+    public Response getBookByName(@QueryParam("title") String title){
+        return Response.ok(bookService.getBookDTOByName(title), MediaType.APPLICATION_JSON).build();
     }
 }

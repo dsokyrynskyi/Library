@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class AuthorService {
+public class AuthorService{
 
     private final AuthorDAO authorDAO;
     private final AuthorMapper authorMapper;

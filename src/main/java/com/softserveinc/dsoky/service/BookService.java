@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class BookService {
+public class BookService{
 
     private final BookDAO bookDAO;
     private final BookMapper bookMapper;

@@ -24,7 +24,7 @@ public class AuthorRepository implements AuthorDAO {
 
     @Override
     public List<Author> getAll() {
-        final String sql = "SELECT * FROM \"Author\"";
+        final String sql = "SELECT * FROM \"author\"";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new Author(
                 rs.getInt("author_id"),
                 rs.getString("name"),
@@ -35,7 +35,7 @@ public class AuthorRepository implements AuthorDAO {
 
     @Override
     public Author get(long id) {
-        final String sql = "SELECT * FROM \"Author\" where author_id = :id";
+        final String sql = "SELECT * FROM \"author\" where author_id = :id";
         SqlParameterSource param = new MapSqlParameterSource("id", id);
         Author author;
         try {
@@ -53,9 +53,9 @@ public class AuthorRepository implements AuthorDAO {
 
     @Override
     public List<Author> getByBook(long bookId) {
-        final String sql = "select * from \"Author\" \n" +
-                "inner join \"Books_Authors\" on \"Books_Authors\".author_id = \"Author\".author_id\n" +
-                "where \"Books_Authors\".book_id = :bookId";
+        final String sql = "select * from \"author\" \n" +
+                "inner join \"books_authors\" on \"books_authors\".author_id = \"author\".author_id\n" +
+                "where \"books_authors\".book_id = :bookId";
         SqlParameterSource param = new MapSqlParameterSource("bookId", bookId);
         List<Author> authors = jdbcTemplate.query(sql, param, (rs, rowNum) ->
                 new Author(
@@ -71,7 +71,7 @@ public class AuthorRepository implements AuthorDAO {
 
     @Override
     public void save(Author author) {
-        final String sql = "INSERT INTO \"Author\" (name, birth_date, country) VALUES (:auth_name, :auth_birth, :auth_country)";
+        final String sql = "INSERT INTO \"author\" (name, birth_date, country) VALUES (:auth_name, :auth_birth, :auth_country)";
         SqlParameterSource params = new MapSqlParameterSource("auth_name", author.getName())
                 .addValue("auth_birth", author.getDate())
                 .addValue("auth_country", author.getCountry());
@@ -80,8 +80,8 @@ public class AuthorRepository implements AuthorDAO {
 
     @Override
     public void remove(long id) {
-        final String sqlBooksAuthors = "DELETE FROM \"Books_Authors\" WHERE author_id = :id";
-        final String sqlAuthor = "DELETE FROM \"Author\" WHERE author_id = :id";
+        final String sqlBooksAuthors = "DELETE FROM \"books_authors\" WHERE author_id = :id";
+        final String sqlAuthor = "DELETE FROM \"author\" WHERE author_id = :id";
         SqlParameterSource param = new MapSqlParameterSource("id", id);
         jdbcTemplate.update(sqlBooksAuthors, param);
         jdbcTemplate.update(sqlAuthor, param);
@@ -89,7 +89,7 @@ public class AuthorRepository implements AuthorDAO {
 
     @Override
     public void update(Author author) {
-        final String sql = "UPDATE \"Author\" set name = :name, country = :country, birth_date = :date WHERE author_id = :id";
+        final String sql = "UPDATE \"author\" set name = :name, country = :country, birth_date = :date WHERE author_id = :id";
         SqlParameterSource params = new MapSqlParameterSource("name", author.getName())
                 .addValue("id", author.getId())
                 .addValue("country", author.getCountry())

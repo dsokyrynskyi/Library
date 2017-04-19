@@ -4,42 +4,45 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-        <changeSet id="4" author="daniel">
-            <createTable tableName="Book">
-                <column name="book_id" autoIncrement="true" type="integer">
-                    <constraints primaryKey="true" nullable="false"/>
-                </column>
-                <column name="name" type="varchar(200)">
-                    <constraints nullable="false" unique="true"/>
-                </column>
-                <column name="isbn" type="varchar(100)">
-                    <constraints unique="true"/>
-                </column>
-                <column name="publish_date" type="date"/>
-                <column name="genre" type="varchar(100)"/>
-                <column name="publisher" type="integer"/>
-            </createTable>
-        </changeSet>
-
         <changeSet id="5" author="daniel">
-            <addForeignKeyConstraint baseTableName="Book"
-                                     baseColumnNames="publisher"
-                                     constraintName="fk_publisher_id"
-                                     referencedTableName="Publisher"
-                                     referencedColumnNames="publisher_id"/>
-            <createTable tableName="Books_Authors">
-                <column name="book_id" type="integer">
-                    <constraints primaryKey="true" nullable="false" foreignKeyName="book_id" referencedTableName="Book" referencedColumnNames="book_id"/>
+            <createTable tableName="BOOK">
+                <column name="BOOK_ID" type="INTEGER"/>
+                <column name="NAME" type="VARCHAR(250)"/>
+                <column name="ISBN" type="VARCHAR(100)"/>
+                <column name="PUBLISH_DATE" type="DATE"/>
+                <column name="GENRE" type="VARCHAR(100)"/>
+                <column name="PUBLISHER" type="INTEGER"/>
+            </createTable>
+        </changeSet>
+
+        <changeSet id="6" author="daniel">
+            <addPrimaryKey tableName="BOOK" columnNames="BOOK_ID"/>
+            <addAutoIncrement tableName="BOOK" columnName="BOOK_ID"/>
+            <addNotNullConstraint tableName="BOOK" columnName="NAME"/>
+            <addUniqueConstraint tableName="BOOK" columnNames="NAME"/>
+            <addUniqueConstraint tableName="BOOK" columnNames="ISBN"/>
+            <addForeignKeyConstraint baseTableName="BOOK"
+                                     baseColumnNames="PUBLISHER"
+                                     constraintName="FK_BOOK_PUBLISHER"
+                                     referencedTableName="PUBLISHER"
+                                     referencedColumnNames="PUBLISHER_ID"/>
+        </changeSet>
+    
+        <changeSet id="7" author="daniel">
+            <createTable tableName="BOOKS_AUTHORS">
+                <column name="BOOK_ID" type="INTEGER">
+                    <constraints primaryKey="true" nullable="false" foreignKeyName="FK_BOOKS_AUTHORS_BOOK" referencedTableName="BOOK" referencedColumnNames="BOOK_ID"/>
                 </column>
-                <column name="author_id" type="integer">
-                    <constraints primaryKey="true" nullable="false" foreignKeyName="author_id" referencedTableName="Author" referencedColumnNames="author_id"/>
+                <column name="AUTHOR_ID" type="INTEGER">
+                    <constraints primaryKey="true" nullable="false" foreignKeyName="FK_BOOKS_AUTHORS_AUTHOR" referencedTableName="AUTHOR" referencedColumnNames="AUTHOR_ID"/>
                 </column>
             </createTable>
         </changeSet>
 
-    <changeSet id="13" author="daniel">
-        <createIndex tableName="Book" indexName="idx_name">
-            <column name="name"/>
-        </createIndex>
-    </changeSet>
+        <changeSet id="8" author="daniel">
+            <createIndex tableName="BOOK" indexName="IDX_BOOK_NAME">
+                <column name="NAME"/>
+            </createIndex>
+        </changeSet>
+
 </databaseChangeLog>

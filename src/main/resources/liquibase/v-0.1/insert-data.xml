@@ -4,125 +4,129 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
     
-    <changeSet id="7" author="daniel">
-        <insert tableName="Publisher">
+    <changeSet id="9" author="daniel">
+        <insert tableName="PUBLISHER">
             <column name="name">Pearson</column>
             <column name="country">UK</column>
         </insert>
-        <insert tableName="Publisher">
+        <insert tableName="PUBLISHER">
             <column name="name">ThomsonReuters</column>
             <column name="country">Canada</column>
         </insert>
-        <insert tableName="Publisher">
+        <insert tableName="PUBLISHER">
             <column name="name">Penguin Random House</column>
             <column name="country">Germany</column>
         </insert>
-        <insert tableName="Publisher">
+        <insert tableName="PUBLISHER">
             <column name="name">Scholastic</column>
             <column name="country">US</column>
         </insert>
-        <insert tableName="Publisher">
+        <insert tableName="PUBLISHER">
             <column name="name">China Publishing Group</column>
             <column name="country">China</column>
         </insert>
-        <insert tableName="Publisher">
+        <insert tableName="PUBLISHER">
             <column name="name">McGraw-Hill Education</column>
             <column name="country">US</column>
         </insert>
-        <insert tableName="Publisher">
+        <insert tableName="PUBLISHER">
             <column name="name">De Agostini Editore</column>
             <column name="country">Italy</column>
         </insert>
+
         <rollback>
-            <delete tableName="Publisher"/>
+            <delete tableName="PUBLISHER"/>
         </rollback>
     </changeSet>
     
-    <changeSet id="8" author="daniel">
-        <insert tableName="Author">
+    <changeSet id="10" author="daniel">
+        <insert tableName="AUTHOR">
             <column name="name">Joshua Bloch</column>
             <column name="birth_date">28.07.1961</column>
         </insert>
-        <insert tableName="Author">
+        <insert tableName="AUTHOR">
             <column name="name">Martin Odersky</column>
             <column name="birth_date">05.09.1958</column>
         </insert>
-        <insert tableName="Author">
+        <insert tableName="AUTHOR">
             <column name="name">Ilya Ilf</column>
             <column name="birth_date">12.12.1897</column>
         </insert>
-        <insert tableName="Author">
+        <insert tableName="AUTHOR">
             <column name="name">Yevgeniy Petrov</column>
             <column name="birth_date">11.10.1903</column>
         </insert>
-        <insert tableName="Author">
+        <insert tableName="AUTHOR">
             <column name="name">Fyodor Dostoyevsky</column>
             <column name="birth_date">11.11.1821</column>
         </insert>
-        <insert tableName="Author">
+        <insert tableName="AUTHOR">
             <column name="name">Leo Tolstoy</column>
             <column name="birth_date">09.09.1828</column>
         </insert>
-        <rollback>
-            <delete tableName="Author"/>
-        </rollback>
-    </changeSet>
 
-    <changeSet id="9" author="daniel">
-        <insert tableName="Book">
-            <column name="name">Effective Java</column>
-            <column name="isbn">9780321356680</column>
-            <column name="publish_date">07.05.2004</column>
-        </insert>
-        <insert tableName="Book">
-            <column name="name">Programming in Scala</column>
-            <column name="isbn">0981531644</column>
-            <column name="publish_date">04.03.2012</column>
-        </insert>
-        <insert tableName="Book">
-            <column name="name">Anna Karenina</column>
-            <column name="isbn">8601400171455</column>
-            <column name="publish_date">11.03.1865</column>
-        </insert>
         <rollback>
-            <delete tableName="Book"/>
-        </rollback>
-    </changeSet>
-
-    <changeSet id="10" author="daniel">
-        <insert tableName="Books_Authors">
-            <column name="book_id">1</column>
-            <column name="author_id">1</column>
-        </insert>
-        <insert tableName="Books_Authors">
-            <column name="book_id">1</column>
-            <column name="author_id">6</column>
-        </insert>
-        <insert tableName="Books_Authors">
-            <column name="book_id">2</column>
-            <column name="author_id">2</column>
-        </insert>
-        <insert tableName="Books_Authors">
-            <column name="book_id">3</column>
-            <column name="author_id">6</column>
-        </insert>
-        <rollback>
-            <delete tableName="Books_Authors"/>
+            <delete tableName="AUTHOR"/>
         </rollback>
     </changeSet>
 
     <changeSet id="11" author="daniel">
-        <update tableName="Book">
+        <insert tableName="BOOK">
+            <column name="name">Effective Java</column>
+            <column name="isbn">9780321356680</column>
+            <column name="publish_date">07.05.2004</column>
+        </insert>
+        <insert tableName="BOOK">
+            <column name="name">Programming in Scala</column>
+            <column name="isbn">0981531644</column>
+            <column name="publish_date">04.03.2012</column>
+        </insert>
+        <insert tableName="BOOK">
+            <column name="name">Anna Karenina</column>
+            <column name="isbn">8601400171455</column>
+            <column name="publish_date">11.03.1865</column>
+        </insert>
+
+        <rollback>
+            <delete tableName="BOOK"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="12" author="daniel">
+        <insert tableName="BOOKS_AUTHORS">
+            <column name="book_id">1</column>
+            <column name="author_id">1</column>
+        </insert>
+        <insert tableName="BOOKS_AUTHORS">
+            <column name="book_id">1</column>
+            <column name="author_id">6</column>
+        </insert>
+        <insert tableName="BOOKS_AUTHORS">
+            <column name="book_id">2</column>
+            <column name="author_id">2</column>
+        </insert>
+        <insert tableName="BOOKS_AUTHORS">
+            <column name="book_id">3</column>
+            <column name="author_id">6</column>
+        </insert>
+
+        <rollback>
+            <delete tableName="BOOKS_AUTHORS"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="13" author="daniel">
+        <update tableName="BOOK">
             <column name="genre">Computers</column>
             <column name="publisher">1</column>
             <where>book_id = 1</where>
         </update>
-        <update tableName="Book">
+        <update tableName="BOOK">
             <column name="genre">Horror</column>
             <column name="publisher">2</column>
             <where>book_id = 2</where>
         </update>
-        <update tableName="Book">
+        <update tableName="BOOK">
             <column name="genre">Roman</column>
             <column name="publisher">2</column>
             <where>book_id = 3</where>

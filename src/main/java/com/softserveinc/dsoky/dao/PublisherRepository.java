@@ -24,7 +24,7 @@ public class PublisherRepository implements PublisherDAO {
 
     @Override
     public List<Publisher> getAll() {
-        final String sql = "SELECT * FROM \"Publisher\"";
+        final String sql = "SELECT * FROM \"publisher\"";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new Publisher(
                 rs.getInt("publisher_id"),
                 rs.getString("name"),
@@ -34,7 +34,7 @@ public class PublisherRepository implements PublisherDAO {
 
     @Override
     public Publisher get(long id) {
-        final String sql = "SELECT * FROM \"Publisher\" where publisher_id = :id";
+        final String sql = "SELECT * FROM \"publisher\" where publisher_id = :id";
         SqlParameterSource param = new MapSqlParameterSource("id", id);
         Publisher publisher;
         try {
@@ -51,9 +51,9 @@ public class PublisherRepository implements PublisherDAO {
 
     @Override
     public Publisher getByBook(long id) {
-        final String sql = "select * from \"Publisher\"\n" +
-                "inner join \"Book\" on \"Book\".publisher = \"Publisher\".publisher_id  \n" +
-                "where \"Book\".book_id = :id";
+        final String sql = "select * from \"publisher\"\n" +
+                "inner join \"book\" on \"book\".publisher = \"publisher\".publisher_id  \n" +
+                "where \"book\".book_id = :id";
         SqlParameterSource param = new MapSqlParameterSource("id", id);
         Publisher publisher;
         try {
@@ -70,7 +70,7 @@ public class PublisherRepository implements PublisherDAO {
 
     @Override
     public void save(Publisher publisher) {
-        final String sql = "INSERT INTO \"Publisher\" (name, country) VALUES (:p_name, :p_country)";
+        final String sql = "INSERT INTO \"publisher\" (name, country) VALUES (:p_name, :p_country)";
         SqlParameterSource params = new MapSqlParameterSource("p_name", publisher.getName())
                 .addValue("p_country", publisher.getCountry());
         jdbcTemplate.update(sql, params);
@@ -78,14 +78,14 @@ public class PublisherRepository implements PublisherDAO {
 
     @Override
     public void remove(long id) {
-        final String sql = "DELETE FROM \"Publisher\" WHERE publisher_id = :id";
+        final String sql = "DELETE FROM \"publisher\" WHERE publisher_id = :id";
         SqlParameterSource param = new MapSqlParameterSource("id", id);
         jdbcTemplate.update(sql, param);
     }
 
     @Override
     public void update(Publisher publisher) {
-        final String sql = "UPDATE \"Publisher\" set name = :name, country = :country WHERE publisher_id = :id";
+        final String sql = "UPDATE \"publisher\" set name = :name, country = :country WHERE publisher_id = :id";
         SqlParameterSource params = new MapSqlParameterSource("name", publisher.getName())
                 .addValue("id", publisher.getId())
                 .addValue("country", publisher.getCountry());

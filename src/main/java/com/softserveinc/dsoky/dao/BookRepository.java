@@ -33,18 +33,18 @@ public class BookRepository implements BookDAO {
 
     @Override
     public List<Book> getAll() {
-        final String sql = "select * from \"Book\" \n" +
-                "left join \"Publisher\" on \"Book\".publisher = \"Publisher\".publisher_id\n" +
-                "left join \"Books_Authors\" on \"Books_Authors\".book_id = \"Book\".book_id";
+        final String sql = "select * from \"book\" \n" +
+                "left join \"publisher\" on \"book\".publisher = \"publisher\".publisher_id\n" +
+                "left join \"books_authors\" on \"books_authors\".book_id = \"book\".book_id";
         return getWithoutCartesianProduct(sql, new MapSqlParameterSource());
     }
 
     @Override
     public Book get(long id) throws NoSuchLibraryResourceException {
-        final String sql = "select * from \"Book\" \n" +
-                "left join \"Publisher\" on \"Book\".publisher = \"Publisher\".publisher_id\n" +
-                "left join \"Books_Authors\" on \"Books_Authors\".book_id = \"Book\".book_id\n" +
-                "where \"Book\".book_id = :id";
+        final String sql = "select * from \"book\" \n" +
+                "left join \"publisher\" on \"book\".publisher = \"publisher\".publisher_id\n" +
+                "left join \"books_authors\" on \"books_authors\".book_id = \"book\".book_id\n" +
+                "where \"book\".book_id = :id";
         SqlParameterSource param = new MapSqlParameterSource("id", id);
         List<Book> books = getWithoutCartesianProduct(sql, param);
         if (books.isEmpty())
@@ -54,11 +54,11 @@ public class BookRepository implements BookDAO {
 
     @Override
     public List<Book> getByAuthor(long id) {
-        final String sql = "select * from \"Book\"\n" +
-                "left join \"Publisher\" on \"Book\".publisher = \"Publisher\".publisher_id\n" +
-                "left join \"Books_Authors\" on \"Books_Authors\".book_id = \"Book\".book_id\n" +
-                "where \"Book\".book_id IN\n" +
-                "(select \"Books_Authors\".book_id from \"Books_Authors\"\n" +
+        final String sql = "select * from \"book\"\n" +
+                "left join \"publisher\" on \"book\".publisher = \"publisher\".publisher_id\n" +
+                "left join \"books_authors\" on \"books_authors\".book_id = \"book\".book_id\n" +
+                "where \"book\".book_id IN\n" +
+                "(select \"books_authors\".book_id from \"books_authors\"\n" +
                 "where author_id = :authorId)";
         SqlParameterSource param = new MapSqlParameterSource("authorId", id);
         List<Book> books = getWithoutCartesianProduct(sql, param);
@@ -69,7 +69,7 @@ public class BookRepository implements BookDAO {
 
     @Override
     public List<Book> getByPublisher(long id) {
-        final String sql = "select * from \"Book\" \n" +
+        final String sql = "select * from \"book\" \n" +
                 "where publisher = :publisherId";
         SqlParameterSource param = new MapSqlParameterSource("publisherId", id);
         List<Book> books =  jdbcTemplate.query(sql, param, (rs, rowNum) -> new Book(
@@ -111,8 +111,8 @@ public class BookRepository implements BookDAO {
 
     @Override
     public void remove(long id) {
-        final String sqlBooksAuthors = "DELETE FROM \"Books_Authors\" WHERE book_id = :id";
-        final String sqlBook = "DELETE FROM \"Book\" WHERE book_id = :id";
+        final String sqlBooksAuthors = "DELETE FROM \"books_authors\" WHERE book_id = :id";
+        final String sqlBook = "DELETE FROM \"book\" WHERE book_id = :id";
         SqlParameterSource param = new MapSqlParameterSource("id", id);
         jdbcTemplate.update(sqlBooksAuthors, param);
         jdbcTemplate.update(sqlBook, param);
@@ -120,8 +120,8 @@ public class BookRepository implements BookDAO {
 
     @Override
     public void save(Book book) {
-        final String sqlBook = "INSERT INTO \"Book\" (name, isbn, publish_date, genre, publisher) VALUES (:bookName, :bookIsbn, :bookDate, :bookGenre, :publisherId)";
-        final String sqlBookAuth = "INSERT INTO \"Books_Authors\" VALUES (:bookId, :authId)";
+        final String sqlBook = "INSERT INTO \"book\" (name, isbn, publish_date, genre, publisher) VALUES (:bookName, :bookIsbn, :bookDate, :bookGenre, :publisherId)";
+        final String sqlBookAuth = "INSERT INTO \"books_authors\" VALUES (:bookId, :authId)";
         long insertedId = insertBookFields(book, sqlBook);
         book.getAuthors().stream()
                 .map(Author::getId)
@@ -157,7 +157,7 @@ public class BookRepository implements BookDAO {
     }
 
     private void updateBookFields(Book book) {
-        final String sql = "UPDATE \"Book\" set name = :name, isbn = :isbn, publish_date = :date, genre = :genre, publisher = :publisher WHERE book_id = :id";
+        final String sql = "UPDATE \"book\" set name = :name, isbn = :isbn, publish_date = :date, genre = :genre, publisher = :publisher WHERE book_id = :id";
         SqlParameterSource params = new MapSqlParameterSource("name", book.getName())
                 .addValue("id", book.getId())
                 .addValue("isbn", book.getIsbn())
@@ -173,10 +173,10 @@ public class BookRepository implements BookDAO {
     }
 
     private void updateBooksAuthorsFields(Book book) {
-        final String delSql = "DELETE FROM \"Books_Authors\" where book_id = :bookId";
+        final String delSql = "DELETE FROM \"books_authors\" where book_id = :bookId";
         SqlParameterSource delParam = new MapSqlParameterSource("bookId", book.getId());
         jdbcTemplate.update(delSql, delParam);
-        final String insSql = "INSERT INTO \"Books_Authors\" VALUES(:bookId, :authorId)";
+        final String insSql = "INSERT INTO \"books_authors\" VALUES(:bookId, :authorId)";
         book.getAuthors().stream()
                 .map(Author::getId)
                 .map(aLong -> new MapSqlParameterSource("bookId", book.getId()).addValue("authorId", aLong))
@@ -185,7 +185,7 @@ public class BookRepository implements BookDAO {
 
     @Override
     public Book getByName(String name){
-        final String sql = "select * from \"Book\"\n" +
+        final String sql = "select * from \"book\"\n" +
                 "where name = :name";
         SqlParameterSource param = new MapSqlParameterSource("name", name);
         Book book;

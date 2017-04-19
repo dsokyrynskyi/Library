@@ -6,7 +6,7 @@
 
         <changeSet id="5" author="daniel">
             <createTable tableName="BOOK">
-                <column name="BOOK_ID" type="INTEGER"/>
+                <column name="ID" type="INTEGER"/>
                 <column name="NAME" type="VARCHAR(250)"/>
                 <column name="ISBN" type="VARCHAR(100)"/>
                 <column name="PUBLISH_DATE" type="DATE"/>
@@ -16,8 +16,8 @@
         </changeSet>
 
         <changeSet id="6" author="daniel">
-            <addPrimaryKey tableName="BOOK" columnNames="BOOK_ID"/>
-            <addAutoIncrement tableName="BOOK" columnName="BOOK_ID"/>
+            <addPrimaryKey tableName="BOOK" columnNames="ID"/>
+            <addAutoIncrement tableName="BOOK" columnName="ID"/>
             <addNotNullConstraint tableName="BOOK" columnName="NAME"/>
             <addUniqueConstraint tableName="BOOK" columnNames="NAME"/>
             <addUniqueConstraint tableName="BOOK" columnNames="ISBN"/>
@@ -25,16 +25,16 @@
                                      baseColumnNames="PUBLISHER"
                                      constraintName="FK_BOOK_PUBLISHER"
                                      referencedTableName="PUBLISHER"
-                                     referencedColumnNames="PUBLISHER_ID"/>
+                                     referencedColumnNames="ID"/>
         </changeSet>
     
         <changeSet id="7" author="daniel">
             <createTable tableName="BOOKS_AUTHORS">
                 <column name="BOOK_ID" type="INTEGER">
-                    <constraints primaryKey="true" nullable="false" foreignKeyName="FK_BOOKS_AUTHORS_BOOK" referencedTableName="BOOK" referencedColumnNames="BOOK_ID"/>
+                    <constraints primaryKey="true" nullable="false" foreignKeyName="FK_BOOKS_AUTHORS_BOOK" referencedTableName="BOOK" referencedColumnNames="ID"/>
                 </column>
                 <column name="AUTHOR_ID" type="INTEGER">
-                    <constraints primaryKey="true" nullable="false" foreignKeyName="FK_BOOKS_AUTHORS_AUTHOR" referencedTableName="AUTHOR" referencedColumnNames="AUTHOR_ID"/>
+                    <constraints primaryKey="true" nullable="false" foreignKeyName="FK_BOOKS_AUTHORS_AUTHOR" referencedTableName="AUTHOR" referencedColumnNames="ID"/>
                 </column>
             </createTable>
         </changeSet>

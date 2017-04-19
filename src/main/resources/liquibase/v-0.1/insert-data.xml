@@ -119,17 +119,17 @@
         <update tableName="BOOK">
             <column name="genre">Computers</column>
             <column name="publisher">1</column>
-            <where>book_id = 1</where>
+            <where>id = 1</where>
         </update>
         <update tableName="BOOK">
             <column name="genre">Horror</column>
             <column name="publisher">2</column>
-            <where>book_id = 2</where>
+            <where>id = 2</where>
         </update>
         <update tableName="BOOK">
             <column name="genre">Roman</column>
             <column name="publisher">2</column>
-            <where>book_id = 3</where>
+            <where>id = 3</where>
         </update>
     </changeSet>
 </databaseChangeLog>

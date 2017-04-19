@@ -4,6 +4,7 @@ import com.softserveinc.dsoky.api.Author;
 import com.softserveinc.dsoky.exceptions.NoSuchLibraryResourceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -13,10 +14,50 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class AuthorRepository implements AuthorDAO {
+public class AuthorRepository extends AbstractLibraryResourceRepository<Author> implements AuthorDAO {
+    @Override
+    public String getTableName() {
+        return "\"author\"";
+    }
 
-    private NamedParameterJdbcTemplate jdbcTemplate;
+    @Override
+    public RowMapper<Author> getRowMapper() {
+        return (rs, rowNum) -> new Author(
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("country"),
+                rs.getDate("birth_date").toLocalDate()
+        );
+    }
 
+    @Override
+    protected String getTableParams() {
+        return ":name, :birth_date, :country";
+    }
+
+    @Override
+    protected String getTableFields() {
+        return "name, birth_date, country";
+    }
+
+    @Override
+    protected SqlParameterSource parseSqlParams(Author entity) {
+        return new MapSqlParameterSource("name", entity.getName())
+                .addValue("birth_date", entity.getDate())
+                .addValue("country", entity.getCountry());
+    }
+
+    @Override
+    public List<Author> getByBook(long id) {
+        return null;
+    }
+
+    @Override
+    public void update(Author entity) {
+
+    }
+
+   /* private NamedParameterJdbcTemplate jdbcTemplate;
     @Autowired
     public void setDataSource(DataSource dataSource) {
         jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -95,5 +136,5 @@ public class AuthorRepository implements AuthorDAO {
                 .addValue("country", author.getCountry())
                 .addValue("date", author.getDate());
         jdbcTemplate.update(sql, params);
-    }
+    }*/
 }

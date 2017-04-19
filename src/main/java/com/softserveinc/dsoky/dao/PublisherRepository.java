@@ -4,6 +4,7 @@ import com.softserveinc.dsoky.api.Publisher;
 import com.softserveinc.dsoky.exceptions.NoSuchLibraryResourceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -13,10 +14,49 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class PublisherRepository implements PublisherDAO {
+public class PublisherRepository extends AbstractLibraryResourceRepository<Publisher> implements PublisherDAO {
+    @Override
+    public String getTableName() {
+        return "\"publisher\"";
+    }
 
-    private NamedParameterJdbcTemplate jdbcTemplate;
+    @Override
+    public RowMapper<Publisher> getRowMapper() {
+        return (rs, rowNum) -> new Publisher(
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("country")
+        );
+    }
 
+    @Override
+    protected String getTableFields() {
+        return "name, country";
+    }
+
+    @Override
+    protected String getTableParams() {
+        return ":name, :country";
+    }
+
+    @Override
+    protected SqlParameterSource parseSqlParams(Publisher publisher) {
+        return new MapSqlParameterSource("name", publisher.getName())
+                .addValue("country", publisher.getCountry()
+                );
+    }
+
+    @Override
+    public Publisher getByBook(long id) {
+        return null;
+    }
+
+    @Override
+    public void update(Publisher entity) {
+
+    }
+
+    /*private NamedParameterJdbcTemplate jdbcTemplate;
     @Autowired
     public void setDataSource(DataSource dataSource) {
         jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -90,5 +130,5 @@ public class PublisherRepository implements PublisherDAO {
                 .addValue("id", publisher.getId())
                 .addValue("country", publisher.getCountry());
         jdbcTemplate.update(sql, params);
-    }
+    }*/
 }

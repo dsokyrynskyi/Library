@@ -6,7 +6,7 @@
 
     <changeSet id="1" author="daniel" >
         <createTable tableName="AUTHOR" >
-            <column name="AUTHOR_ID" type="INTEGER"/>
+            <column name="ID" type="INTEGER"/>
             <column name="NAME" type="VARCHAR(250)"/>
             <column name="BIRTH_DATE" type="DATE"/>
             <column name="COUNTRY" type="VARCHAR(250)"/>
@@ -14,8 +14,8 @@
     </changeSet>
 
     <changeSet id="2" author="daniel">
-        <addPrimaryKey tableName="AUTHOR" columnNames="AUTHOR_ID"/>
-        <addAutoIncrement tableName="AUTHOR" columnName="AUTHOR_ID"/>
+        <addPrimaryKey tableName="AUTHOR" columnNames="ID"/>
+        <addAutoIncrement tableName="AUTHOR" columnName="ID"/>
         <addNotNullConstraint tableName="AUTHOR" columnName="NAME"/>
         <addUniqueConstraint tableName="AUTHOR" columnNames="NAME"/>
     </changeSet>

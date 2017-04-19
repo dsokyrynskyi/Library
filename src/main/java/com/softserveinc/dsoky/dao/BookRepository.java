@@ -8,6 +8,7 @@ import com.softserveinc.dsoky.exceptions.NoSuchLibraryResourceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -16,30 +17,110 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Repository
-public class BookRepository implements BookDAO {
-
-    private NamedParameterJdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+public class BookRepository extends AbstractLibraryResourceRepository<Book> implements BookDAO {
+    @Override
+    public String getTableName() {
+        return "\"book\"";
     }
 
     @Override
+    public RowMapper<Book> getRowMapper() {
+        return (rs, rowNum) -> new Book(
+                rs.getLong("id"),
+                rs.getString("name"),
+                rs.getString("isbn"),
+                rs.getDate("publish_date").toLocalDate(),
+                rs.getString("genre")
+        );
+    }
+
+    @Override
+    protected String getTableFields() {
+        return "name, isbn, publish_date, genre";
+    }
+
+    @Override
+    protected String getTableParams() {
+        return ":name, :isbn, :publish_date, :genre";
+    }
+
+    @Override
+    protected SqlParameterSource parseSqlParams(Book book) {
+        return new MapSqlParameterSource(
+                "name", book.getName())
+                .addValue("id", book.getId())
+                .addValue("isbn", book.getIsbn())
+                .addValue("genre", book.getGenre())
+                .addValue("publisher", book.getPublisher().getId())
+                .addValue("date", book.getPublishDate()
+                );
+    }
+
+    @Override
+    public void update(Book book) {
+        updateBookFields(book);
+        updateBooksAuthorsFields(book);
+    }
+
+    private void updateBookFields(Book book) {
+        final String sql = "UPDATE \"book\" set name = :name, isbn = :isbn, publish_date = :date, genre = :genre, publisher = :publisher WHERE book_id = :id";
+        try {
+            jdbcTemplate.update(sql, parseSqlParams(book));
+        }catch (DataIntegrityViolationException e){
+            String message = e.getMostSpecificCause().getMessage();
+            throw new CreateResourceException(message.substring(message.indexOf("Detail:")+8, message.length()));
+        }
+    }
+
+    private void updateBooksAuthorsFields(Book book) {
+        final String delSql = "DELETE FROM \"books_authors\" where book_id = :bookId";
+        SqlParameterSource delParam = new MapSqlParameterSource("bookId", book.getId());
+        jdbcTemplate.update(delSql, delParam);
+        final String insSql = "INSERT INTO \"books_authors\" VALUES(:bookId, :authorId)";
+        book.getAuthors().stream()
+                .map(Author::getId)
+                .map(aLong -> new MapSqlParameterSource("bookId", book.getId()).addValue("authorId", aLong))
+                .forEach(params -> jdbcTemplate.update(insSql, params));
+    }
+
+    @Override
+    public List<Book> getByAuthor(long authorId) {
+        return null;
+    }
+
+    @Override
+    public List<Book> getByPublisher(long id) {
+        return null;
+    }
+
+    @Override
+    public Book getByName(String name) {
+        return null;
+    }
+
+   /* private NamedParameterJdbcTemplate jdbcTemplate;
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    }*/
+
+    /*@Override
     public List<Book> getAll() {
         final String sql = "select * from \"book\" \n" +
                 "left join \"publisher\" on \"book\".publisher = \"publisher\".publisher_id\n" +
                 "left join \"books_authors\" on \"books_authors\".book_id = \"book\".book_id";
         return getWithoutCartesianProduct(sql, new MapSqlParameterSource());
-    }
+    }*/
 
-    @Override
+   /* @Override
     public Book get(long id) throws NoSuchLibraryResourceException {
         final String sql = "select * from \"book\" \n" +
                 "left join \"publisher\" on \"book\".publisher = \"publisher\".publisher_id\n" +
@@ -156,6 +237,22 @@ public class BookRepository implements BookDAO {
         updateBooksAuthorsFields(book);
     }
 
+    @Override
+    public RowMapper<Book> getRowMapper() {
+        return (rs, rowNum) -> new Book(
+                rs.getLong("book_id"),
+                rs.getString("name"),
+                rs.getString("isbn"),
+                rs.getDate("publish_date").toLocalDate(),
+                rs.getString("genre")
+        );
+    }
+
+    @Override
+    public String getTableName() {
+        return "\"book\"";
+    }
+
     private void updateBookFields(Book book) {
         final String sql = "UPDATE \"book\" set name = :name, isbn = :isbn, publish_date = :date, genre = :genre, publisher = :publisher WHERE book_id = :id";
         SqlParameterSource params = new MapSqlParameterSource("name", book.getName())
@@ -201,5 +298,5 @@ public class BookRepository implements BookDAO {
             throw new NoSuchLibraryResourceException("There aren't any books in the Library with NAME = "+name);
         }
         return book;
-    }
+    }*/
 }

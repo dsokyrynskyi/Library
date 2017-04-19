@@ -4,11 +4,6 @@ import com.softserveinc.dsoky.api.Author;
 
 import java.util.List;
 
-public interface AuthorDAO {
-    List<Author> getAll();
+public interface AuthorDAO extends LibraryResourceDAO<Author>{
     List<Author> getByBook(long id);
-    Author get(long id);
-    void save(Author author);
-    void remove(long id);
-    void update(Author author);
 }

@@ -6,15 +6,15 @@
 
     <changeSet id="3" author="daniel">
         <createTable tableName="PUBLISHER">
-            <column name="PUBLISHER_ID" type="INTEGER"/>
+            <column name="ID" type="INTEGER"/>
             <column name="NAME" type="VARCHAR(250)"/>
             <column name="COUNTRY" type="VARCHAR(250)"/>
         </createTable>
     </changeSet>
 
     <changeSet id="4" author="daniel">
-        <addPrimaryKey tableName="PUBLISHER" columnNames="PUBLISHER_ID"/>
-        <addAutoIncrement tableName="PUBLISHER" columnName="PUBLISHER_ID"/>
+        <addPrimaryKey tableName="PUBLISHER" columnNames="ID"/>
+        <addAutoIncrement tableName="PUBLISHER" columnName="ID"/>
         <addNotNullConstraint tableName="PUBLISHER" columnName="NAME"/>
     </changeSet>
 

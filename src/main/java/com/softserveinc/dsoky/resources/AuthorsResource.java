@@ -2,11 +2,11 @@ package com.softserveinc.dsoky.resources;
 
 import com.softserveinc.dsoky.dto.AuthorDTO;
 import com.softserveinc.dsoky.service.AuthorService;
-import com.softserveinc.dsoky.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -78,7 +78,7 @@ public class AuthorsResource{
     @POST
     @Path("/authors/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void saveAuthor(AuthorDTO authorDTO) {
+    public void saveAuthor(@Valid AuthorDTO authorDTO) {
         authorService.save(authorDTO);
     }
 
@@ -108,7 +108,7 @@ public class AuthorsResource{
     @PUT
     @Path("/authors/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateAuthor(@PathParam("id") long id, AuthorDTO authorDTO) {
+    public void updateAuthor(@PathParam("id") long id, @Valid AuthorDTO authorDTO) {
         authorDTO.setId(id);
         authorService.update(authorDTO);
     }

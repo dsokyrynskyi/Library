@@ -3,10 +3,12 @@ package com.softserveinc.dsoky.resources;
 import com.softserveinc.dsoky.dto.BookDTO;
 import com.softserveinc.dsoky.dto.RichBookDTO;
 import com.softserveinc.dsoky.service.BookService;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -81,7 +83,7 @@ public class BooksResource {
     @Path("/books/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response saveBook(RichBookDTO book) {
+    public Response saveBook(@Valid RichBookDTO book) {
         bookService.saveDTO(book);
         return Response.ok().build();
     }
@@ -90,7 +92,7 @@ public class BooksResource {
     @Path("/books/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateBook(RichBookDTO bookDTO, @PathParam("id") long bookId) {
+    public Response updateBook(@Valid RichBookDTO bookDTO, @PathParam("id") long bookId) {
         bookDTO.setId(bookId);
         bookService.update(bookDTO);
         return Response.ok().build();
@@ -127,7 +129,7 @@ public class BooksResource {
     @GET
     @Path("/books/byName")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBookByName(@QueryParam("title") String title){
+    public Response getBookByName(@QueryParam("title") @NotEmpty String title){
         return Response.ok(bookService.getBookDTOByName(title), MediaType.APPLICATION_JSON).build();
     }
 }

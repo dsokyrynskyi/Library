@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
-import java.util.List;
 
 /**
  GET     /v1/publishers/
@@ -76,7 +76,7 @@ public class PublisherResource {
     @POST
     @Path("publishers/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void savePublisher(PublisherDTO publisherDTO) {
+    public void savePublisher(@Valid PublisherDTO publisherDTO) {
         publisherService.save(publisherDTO);
     }
 
@@ -90,7 +90,7 @@ public class PublisherResource {
     @PUT
     @Path("publishers/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updatePublisher(@PathParam("id") long id, PublisherDTO publisherDTO) {
+    public void updatePublisher(@PathParam("id") long id, @Valid PublisherDTO publisherDTO) {
         publisherDTO.setId(id);
         publisherService.update(publisherDTO);
     }

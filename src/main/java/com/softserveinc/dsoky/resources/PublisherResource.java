@@ -14,12 +14,14 @@ import java.net.URI;
 import java.util.List;
 
 /**
+ POST    /v1/books/{bId}/publisher/{pId}
+ PUT     /v1/books/{bId}/publisher/{pId}
+ GET     /v1/books/{id}/publisher
  GET     /v1/publishers/
  POST    /v1/publishers/
  DELETE  /v1/publishers/{id}
  GET     /v1/publishers/{id}
  PUT     /v1/publishers/{id}
- GET     /v1/books/{id}/publisher
  * */
 
 @Component
@@ -99,9 +101,16 @@ public class PublisherResource {
     }
 
     @POST
-    @Path("books/{id}/publisher")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void savePublisherForBook(@PathParam("id") long id, PublisherDTO publisherDTO){
-        System.out.println("books/{id}/publisher");
+    @Path("books/{bId}/publisher/{pId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void savePublisherForBook(@PathParam("bId") long bId, @PathParam("pId") long pId){
+        publisherService.insertForBook(bId, pId);
+    }
+
+    @PUT
+    @Path("books/{bId}/publisher/{pId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void updatePublisherForBook(@PathParam("bId") long bId, @PathParam("pId") long pId){
+        publisherService.insertForBook(bId, pId);
     }
 }

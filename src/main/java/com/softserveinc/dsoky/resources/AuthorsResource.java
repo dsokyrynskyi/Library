@@ -2,6 +2,7 @@ package com.softserveinc.dsoky.resources;
 
 import com.softserveinc.dsoky.dto.AuthorDTO;
 import com.softserveinc.dsoky.service.AuthorService;
+import com.softserveinc.dsoky.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +15,14 @@ import java.net.URI;
 import java.util.List;
 
 /**
- * GET     /v1/authors/
- * POST    /v1/authors/
- * DELETE  /v1/authors/{id}
- * GET     /v1/authors/{id}
- * PUT     /v1/authors/{id}
- * GET     /v1/books/{id}/authors
+ GET     /v1/authors/
+ POST    /v1/authors/
+ DELETE  /v1/authors/{aId}/books/{bId}
+ DELETE  /v1/authors/{id}
+ GET     /v1/authors/{id}
+ PUT     /v1/authors/{id}
+ POST    /v1/books/{bId}/authors/{aId}
+ GET     /v1/books/{id}/authors
  */
 
 @Component
@@ -73,21 +76,37 @@ public class AuthorsResource{
     @POST
     @Path("/authors/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void saveBook(AuthorDTO authorDTO) {
+    public void saveAuthor(AuthorDTO authorDTO) {
         authorService.save(authorDTO);
     }
+
+    @POST
+    @Path("/books/{bId}/authors/{aId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void saveAuthorForBook(@PathParam("bId") long bId, @PathParam("aId") long aId) {
+        authorService.insertForBook(bId, aId);
+    }
+
 
     @DELETE
     @Path("/authors/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void removeBook(@PathParam("id") long id) {
+    public void removeAuthor(@PathParam("id") long id) {
         authorService.remove(id);
+    }
+
+    @DELETE
+    @Path("authors/{aId}/books/{bId}/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void removeRelation(@PathParam("bId") long bId, @PathParam("aId") long aId) {
+        authorService.removeRelation(bId, aId);
     }
 
     @PUT
     @Path("/authors/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateBook(@PathParam("id") long id, AuthorDTO authorDTO) {
+    public void updateAuthor(@PathParam("id") long id, AuthorDTO authorDTO) {
         authorDTO.setId(id);
         authorService.update(authorDTO);
     }

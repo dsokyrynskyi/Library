@@ -14,14 +14,16 @@ import java.net.URI;
 import java.util.List;
 
 /**
- POST    /v1/books/{bId}/publisher/{pId}
- PUT     /v1/books/{bId}/publisher/{pId}
- GET     /v1/books/{id}/publisher
  GET     /v1/publishers/
  POST    /v1/publishers/
+
  DELETE  /v1/publishers/{id}
  GET     /v1/publishers/{id}
  PUT     /v1/publishers/{id}
+
+ GET     /v1/books/{id}/publisher
+ POST    /v1/books/{bId}/publisher/{pId}
+ PUT     /v1/books/{bId}/publisher/{pId}
  * */
 
 @Component

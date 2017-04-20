@@ -17,12 +17,14 @@ import java.util.List;
 /**
  GET     /v1/authors/
  POST    /v1/authors/
- DELETE  /v1/authors/{aId}/books/{bId}
+
  DELETE  /v1/authors/{id}
  GET     /v1/authors/{id}
  PUT     /v1/authors/{id}
- POST    /v1/books/{bId}/authors/{aId}
+
  GET     /v1/books/{id}/authors
+ POST    /v1/books/{bId}/authors/{aId}
+ DELETE  /v1/authors/{aId}/books/{bId}
  */
 
 @Component

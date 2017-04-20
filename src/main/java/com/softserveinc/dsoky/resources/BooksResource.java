@@ -15,14 +15,16 @@ import java.net.URI;
 import java.util.List;
 
 /**
- GET     /v1/authors/{id}/books
  GET     /v1/books/
  POST    /v1/books/
- GET     /v1/books/byName?title='...'
- DELETE  /v1/books/{bId}/authors/{aId}
+
  DELETE  /v1/books/{id}
  GET     /v1/books/{id}
  PUT     /v1/books/{id}
+
+ GET     /v1/books/byName?title='...'
+ DELETE  /v1/books/{bId}/authors/{aId}
+ GET     /v1/authors/{id}/books
  GET     /v1/publishers/{id}/books
  * */
 

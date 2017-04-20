@@ -78,6 +78,7 @@ public class PublisherResource {
 
     @DELETE
     @Path("publishers/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public void removePublisher(@PathParam("id") long id) {
         publisherService.remove(id);
     }
@@ -85,7 +86,8 @@ public class PublisherResource {
     @PUT
     @Path("publishers/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updatePublisher(PublisherDTO publisherDTO) {
+    public void updatePublisher(@PathParam("id") long id, PublisherDTO publisherDTO) {
+        publisherDTO.setId(id);
         publisherService.update(publisherDTO);
     }
 
@@ -94,5 +96,12 @@ public class PublisherResource {
     @Produces(MediaType.APPLICATION_JSON)
     public PublisherDTO getPublisherOfBook(@PathParam("id") long id){
         return publisherService.getDTOByBook(id);
+    }
+
+    @POST
+    @Path("books/{id}/publisher")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void savePublisherForBook(@PathParam("id") long id, PublisherDTO publisherDTO){
+        System.out.println("books/{id}/publisher");
     }
 }

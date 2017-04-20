@@ -79,6 +79,7 @@ public class AuthorsResource{
 
     @DELETE
     @Path("/authors/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public void removeBook(@PathParam("id") long id) {
         authorService.remove(id);
     }
@@ -86,7 +87,8 @@ public class AuthorsResource{
     @PUT
     @Path("/authors/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateBook(AuthorDTO authorDTO) {
+    public void updateBook(@PathParam("id") long id, AuthorDTO authorDTO) {
+        authorDTO.setId(id);
         authorService.update(authorDTO);
     }
 

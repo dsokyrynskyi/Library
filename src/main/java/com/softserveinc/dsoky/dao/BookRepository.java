@@ -1,31 +1,18 @@
 package com.softserveinc.dsoky.dao;
 
-import com.softserveinc.dsoky.api.Author;
 import com.softserveinc.dsoky.api.Book;
-import com.softserveinc.dsoky.api.Publisher;
-import com.softserveinc.dsoky.exceptions.CreateResourceException;
 import com.softserveinc.dsoky.exceptions.NoSuchLibraryResourceException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class BookRepository extends AbstractLibraryResourceRepository<Book> implements BookDAO {
+
     @Override
     public String getTableName() {
         return "\"book\"";
@@ -58,245 +45,52 @@ public class BookRepository extends AbstractLibraryResourceRepository<Book> impl
                 "name", book.getName())
                 .addValue("id", book.getId())
                 .addValue("isbn", book.getIsbn())
-                .addValue("genre", book.getGenre())
-                .addValue("publisher", book.getPublisher().getId())
-                .addValue("date", book.getPublishDate()
+                .addValue("publish_date", book.getPublishDate())
+                .addValue("genre", book.getGenre()
                 );
     }
 
     @Override
-    public void update(Book book) {
-        updateBookFields(book);
-        updateBooksAuthorsFields(book);
+    protected String getTableFieldsWithParams() {
+        return "name = :name, isbn = :isbn, publish_date = :publish_date, genre = :genre";
     }
 
-    private void updateBookFields(Book book) {
-        final String sql = "UPDATE \"book\" set name = :name, isbn = :isbn, publish_date = :date, genre = :genre, publisher = :publisher WHERE book_id = :id";
-        try {
-            jdbcTemplate.update(sql, parseSqlParams(book));
-        }catch (DataIntegrityViolationException e){
-            String message = e.getMostSpecificCause().getMessage();
-            throw new CreateResourceException(message.substring(message.indexOf("Detail:")+8, message.length()));
-        }
-    }
-
-    private void updateBooksAuthorsFields(Book book) {
-        final String delSql = "DELETE FROM \"books_authors\" where book_id = :bookId";
-        SqlParameterSource delParam = new MapSqlParameterSource("bookId", book.getId());
-        jdbcTemplate.update(delSql, delParam);
-        final String insSql = "INSERT INTO \"books_authors\" VALUES(:bookId, :authorId)";
-        book.getAuthors().stream()
-                .map(Author::getId)
-                .map(aLong -> new MapSqlParameterSource("bookId", book.getId()).addValue("authorId", aLong))
-                .forEach(params -> jdbcTemplate.update(insSql, params));
-    }
+    /*** from interface */
 
     @Override
     public List<Book> getByAuthor(long authorId) {
-        return null;
+        final String sql = "select * from book \n" +
+                "left join books_authors on book.id = books_authors.book_id\n" +
+                "where author_id = :authorId";
+        SqlParameterSource param = new MapSqlParameterSource("authorId", authorId);
+        List<Book> books = jdbcTemplate.query(sql, param, getRowMapper());
+        if (books.isEmpty())
+            throw new NoSuchLibraryResourceException("There are no books for this author!");
+        return books;
     }
 
     @Override
     public List<Book> getByPublisher(long id) {
-        return null;
+        final String sql = "select * from book \n" +
+                "where publisher = :publisherId";
+        SqlParameterSource param = new MapSqlParameterSource("publisherId", id);
+        List<Book> books = jdbcTemplate.query(sql, param, getRowMapper());
+        if (books.isEmpty())
+            throw new NoSuchLibraryResourceException("There are no books for this publisher!");
+        return books;
     }
 
     @Override
     public Book getByName(String name) {
-        return null;
-    }
-
-   /* private NamedParameterJdbcTemplate jdbcTemplate;
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }*/
-
-    /*@Override
-    public List<Book> getAll() {
-        final String sql = "select * from \"book\" \n" +
-                "left join \"publisher\" on \"book\".publisher = \"publisher\".publisher_id\n" +
-                "left join \"books_authors\" on \"books_authors\".book_id = \"book\".book_id";
-        return getWithoutCartesianProduct(sql, new MapSqlParameterSource());
-    }*/
-
-   /* @Override
-    public Book get(long id) throws NoSuchLibraryResourceException {
-        final String sql = "select * from \"book\" \n" +
-                "left join \"publisher\" on \"book\".publisher = \"publisher\".publisher_id\n" +
-                "left join \"books_authors\" on \"books_authors\".book_id = \"book\".book_id\n" +
-                "where \"book\".book_id = :id";
-        SqlParameterSource param = new MapSqlParameterSource("id", id);
-        List<Book> books = getWithoutCartesianProduct(sql, param);
-        if (books.isEmpty())
-            throw new NoSuchLibraryResourceException("There are not any books with ID = " + id);
-        return books.get(0);
-    }
-
-    @Override
-    public List<Book> getByAuthor(long id) {
-        final String sql = "select * from \"book\"\n" +
-                "left join \"publisher\" on \"book\".publisher = \"publisher\".publisher_id\n" +
-                "left join \"books_authors\" on \"books_authors\".book_id = \"book\".book_id\n" +
-                "where \"book\".book_id IN\n" +
-                "(select \"books_authors\".book_id from \"books_authors\"\n" +
-                "where author_id = :authorId)";
-        SqlParameterSource param = new MapSqlParameterSource("authorId", id);
-        List<Book> books = getWithoutCartesianProduct(sql, param);
-        if (books.isEmpty())
-            throw new NoSuchLibraryResourceException("There are not any books with AUTHOR_ID = " + id);
-        return books;
-    }
-
-    @Override
-    public List<Book> getByPublisher(long id) {
-        final String sql = "select * from \"book\" \n" +
-                "where publisher = :publisherId";
-        SqlParameterSource param = new MapSqlParameterSource("publisherId", id);
-        List<Book> books =  jdbcTemplate.query(sql, param, (rs, rowNum) -> new Book(
-                rs.getLong("book_id"),
-                rs.getString("name"),
-                rs.getString("isbn"),
-                rs.getDate("publish_date").toLocalDate(),
-                rs.getString("genre")));
-        if (books.isEmpty())
-            throw new NoSuchLibraryResourceException("There are not any books with PUBLISHER_ID = " + id);
-        return books;
-    }
-
-    private List<Book> getWithoutCartesianProduct(String sql, SqlParameterSource param) {
-        return jdbcTemplate.query(sql, param, rs -> {
-            Map<Long, Book> bookMap = new HashMap<>();
-            Book book;
-            while (rs.next()) {
-                long bookId = rs.getLong("book_id");
-                book = bookMap.get(bookId);
-                if (book == null) {
-                    book = new Book(
-                            rs.getLong("book_id"),
-                            rs.getString("name"),
-                            rs.getString("isbn"),
-                            rs.getDate("publish_date").toLocalDate(),
-                            rs.getString("genre"),
-                            new Publisher(rs.getLong("publisher"))
-                    );
-                    bookMap.put(bookId, book);
-                }
-                long authorId = rs.getLong("author_id");
-                if (authorId > 0)
-                    book.getAuthors().add(new Author(authorId));
-            }
-            return new ArrayList<>(bookMap.values());
-        });
-    }
-
-    @Override
-    public void remove(long id) {
-        final String sqlBooksAuthors = "DELETE FROM \"books_authors\" WHERE book_id = :id";
-        final String sqlBook = "DELETE FROM \"book\" WHERE book_id = :id";
-        SqlParameterSource param = new MapSqlParameterSource("id", id);
-        jdbcTemplate.update(sqlBooksAuthors, param);
-        jdbcTemplate.update(sqlBook, param);
-    }
-
-    @Override
-    public void save(Book book) {
-        final String sqlBook = "INSERT INTO \"book\" (name, isbn, publish_date, genre, publisher) VALUES (:bookName, :bookIsbn, :bookDate, :bookGenre, :publisherId)";
-        final String sqlBookAuth = "INSERT INTO \"books_authors\" VALUES (:bookId, :authId)";
-        long insertedId = insertBookFields(book, sqlBook);
-        book.getAuthors().stream()
-                .map(Author::getId)
-                .forEach(authId -> insertBooksAuthors(sqlBookAuth, insertedId, authId));
-    }
-
-    private long insertBookFields(Book book, String sqlBook) {
-        SqlParameterSource paramsBook = new MapSqlParameterSource("bookName", book.getName())
-                .addValue("bookIsbn", book.getIsbn())
-                .addValue("bookDate", book.getPublishDate())
-                .addValue("bookGenre", book.getGenre())
-                .addValue("publisherId", book.getPublisher().getId());
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        try {
-            jdbcTemplate.update(sqlBook, paramsBook, keyHolder, new String[]{"book_id"});
-        }catch (DataIntegrityViolationException e){
-            String message = e.getMostSpecificCause().getMessage();
-            throw new CreateResourceException(message.substring(message.indexOf("Detail:")+8, message.length()));
-        }
-        return keyHolder.getKey().longValue();
-    }
-
-    private void insertBooksAuthors(String sqlBooksAuthors, long bookId, long authId) {
-        SqlParameterSource paramsBook = new MapSqlParameterSource("bookId", bookId)
-                .addValue("authId", authId);
-        jdbcTemplate.update(sqlBooksAuthors, paramsBook);
-    }
-
-    @Override
-    public void update(Book book) {
-        updateBookFields(book);
-        updateBooksAuthorsFields(book);
-    }
-
-    @Override
-    public RowMapper<Book> getRowMapper() {
-        return (rs, rowNum) -> new Book(
-                rs.getLong("book_id"),
-                rs.getString("name"),
-                rs.getString("isbn"),
-                rs.getDate("publish_date").toLocalDate(),
-                rs.getString("genre")
-        );
-    }
-
-    @Override
-    public String getTableName() {
-        return "\"book\"";
-    }
-
-    private void updateBookFields(Book book) {
-        final String sql = "UPDATE \"book\" set name = :name, isbn = :isbn, publish_date = :date, genre = :genre, publisher = :publisher WHERE book_id = :id";
-        SqlParameterSource params = new MapSqlParameterSource("name", book.getName())
-                .addValue("id", book.getId())
-                .addValue("isbn", book.getIsbn())
-                .addValue("genre", book.getGenre())
-                .addValue("publisher", book.getPublisher().getId())
-                .addValue("date", book.getPublishDate());
-        try {
-            jdbcTemplate.update(sql, params);
-        }catch (DataIntegrityViolationException e){
-            String message = e.getMostSpecificCause().getMessage();
-            throw new CreateResourceException(message.substring(message.indexOf("Detail:")+8, message.length()));
-        }
-    }
-
-    private void updateBooksAuthorsFields(Book book) {
-        final String delSql = "DELETE FROM \"books_authors\" where book_id = :bookId";
-        SqlParameterSource delParam = new MapSqlParameterSource("bookId", book.getId());
-        jdbcTemplate.update(delSql, delParam);
-        final String insSql = "INSERT INTO \"books_authors\" VALUES(:bookId, :authorId)";
-        book.getAuthors().stream()
-                .map(Author::getId)
-                .map(aLong -> new MapSqlParameterSource("bookId", book.getId()).addValue("authorId", aLong))
-                .forEach(params -> jdbcTemplate.update(insSql, params));
-    }
-
-    @Override
-    public Book getByName(String name){
         final String sql = "select * from \"book\"\n" +
                 "where name = :name";
         SqlParameterSource param = new MapSqlParameterSource("name", name);
         Book book;
         try{
-            book = jdbcTemplate.queryForObject(sql, param, (rs, rowNum) ->  new Book(
-                    rs.getLong("book_id"),
-                    rs.getString("name"),
-                    rs.getString("isbn"),
-                    rs.getDate("publish_date").toLocalDate(),
-                    rs.getString("genre"))
-            );
+            book = jdbcTemplate.queryForObject(sql, param, getRowMapper());
         }catch (EmptyResultDataAccessException e){
-            throw new NoSuchLibraryResourceException("There aren't any books in the Library with NAME = "+name);
+            throw new NoSuchLibraryResourceException("There is no book with this title!");
         }
         return book;
-    }*/
+    }
 }

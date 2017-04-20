@@ -94,6 +94,7 @@ public class BooksResource {
 
     @DELETE
     @Path("/books/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public void removeBook(@PathParam("id") long id) {
         bookService.remove(id);
     }

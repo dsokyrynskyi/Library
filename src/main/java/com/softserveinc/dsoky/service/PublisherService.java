@@ -46,4 +46,8 @@ public class PublisherService{
     public void update(PublisherDTO publisherDTO) {
         publisherDAO.update(publisherMapper.convertToEntity(publisherDTO));
     }
+
+    public void insertForBook(long bId, long pId){
+        publisherDAO.insertPublisherForBook(bId, pId);
+    }
 }

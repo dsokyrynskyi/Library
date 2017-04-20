@@ -1,7 +1,9 @@
 package com.softserveinc.dsoky.dao;
 
 import com.softserveinc.dsoky.api.Author;
+import com.softserveinc.dsoky.exceptions.CreateResourceException;
 import com.softserveinc.dsoky.exceptions.NoSuchLibraryResourceException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -49,8 +51,6 @@ public class AuthorRepository extends AbstractLibraryResourceRepository<Author> 
         return "name = :name, birth_date = :birth_date, country = :country";
     }
 
-    /** from interface**/
-
     @Override
     public List<Author> getByBook(long bookId) {
         String sql = "select * from author \n" +
@@ -61,5 +61,13 @@ public class AuthorRepository extends AbstractLibraryResourceRepository<Author> 
         if(authors.isEmpty())
             throw new NoSuchLibraryResourceException("There are no authors for this book!");
         return authors;
+    }
+
+    @Override
+    public void insertAuthorForBook(long bookId, long authorId){
+        String sql = "INSERT INTO books_authors VALUES(:bookId, :authorId)";
+        SqlParameterSource param = new MapSqlParameterSource("bookId", bookId)
+                .addValue("authorId", authorId);
+        jdbcTemplate.update(sql, param);
     }
 }

@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface PublisherDAO extends LibraryResourceDAO<Publisher>{
     Publisher getByBook(long id);
+    void insertPublisherForBook(long bookId, long pId);
 }

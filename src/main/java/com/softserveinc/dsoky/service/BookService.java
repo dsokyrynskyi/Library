@@ -63,4 +63,8 @@ public class BookService{
     public BookDTO getBookDTOByName(String bookName) {
         return bookMapper.convertToDTO(bookDAO.getByName(bookName));
     }
+
+    public void removeRelation(long bookId, long authId){
+        bookDAO.removeFromBooksAuthors(bookId, authId);
+    }
 }

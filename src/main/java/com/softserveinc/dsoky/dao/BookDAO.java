@@ -9,4 +9,5 @@ public interface BookDAO extends LibraryResourceDAO<Book>{
     List<Book> getByAuthor(long authorId);
     List<Book> getByPublisher(long id);
     Book getByName(String name);
+    void removeFromBooksAuthors(long bookId, long authId);
 }

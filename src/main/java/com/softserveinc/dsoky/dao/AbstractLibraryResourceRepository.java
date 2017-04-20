@@ -70,7 +70,7 @@ public abstract class AbstractLibraryResourceRepository<T> implements LibraryRes
         try {
             jdbcTemplate.update(sql, param);
         }catch (DataIntegrityViolationException e){
-            throw new DeleteResourceException("Foreign key violation");
+            throw new DeleteResourceException("Foreign key violation. Remove parent resource firstly!");
         }
     }
 

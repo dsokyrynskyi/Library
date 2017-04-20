@@ -1,7 +1,10 @@
 package com.softserveinc.dsoky.dao;
 
 import com.softserveinc.dsoky.api.Publisher;
+import com.softserveinc.dsoky.dto.PublisherDTO;
+import com.softserveinc.dsoky.exceptions.CreateResourceException;
 import com.softserveinc.dsoky.exceptions.NoSuchLibraryResourceException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -47,8 +50,6 @@ public class PublisherRepository extends AbstractLibraryResourceRepository<Publi
         return "name = :name, country = :country";
     }
 
-    /*** from interface */
-
     @Override
     public Publisher getByBook(long id) {
         String sql = "select * from publisher \n" +
@@ -62,5 +63,16 @@ public class PublisherRepository extends AbstractLibraryResourceRepository<Publi
             throw new NoSuchLibraryResourceException("There is no publisher for this book!");
         }
         return publisher;
+    }
+
+    @Override
+    public void insertPublisherForBook(long bookId, long pId){
+        String sql = "UPDATE book SET publisher ="+pId+" WHERE book.id = :bookId";
+        SqlParameterSource param = new MapSqlParameterSource("bookId", bookId);
+        try {
+            jdbcTemplate.update(sql, param);
+        }catch (DataIntegrityViolationException e){
+            throw new CreateResourceException("There is no publisher with this id!");
+        }
     }
 }

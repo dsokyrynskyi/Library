@@ -55,7 +55,6 @@ public class BookRepository extends AbstractLibraryResourceRepository<Book> impl
         return "name = :name, isbn = :isbn, publish_date = :publish_date, genre = :genre";
     }
 
-    /*** from interface */
 
     @Override
     public List<Book> getByAuthor(long authorId) {
@@ -92,5 +91,14 @@ public class BookRepository extends AbstractLibraryResourceRepository<Book> impl
             throw new NoSuchLibraryResourceException("There is no book with this title!");
         }
         return book;
+    }
+
+    @Override
+    public void removeFromBooksAuthors(long bookId, long authorId){
+        final String sql = "delete from books_authors\n" +
+                "where book_id = :bookId AND author_id = :authorId";
+        SqlParameterSource param = new MapSqlParameterSource("bookId", bookId)
+                .addValue("authorId", authorId);
+        jdbcTemplate.update(sql, param);
     }
 }

@@ -1,6 +1,7 @@
 package com.softserveinc.dsoky.service;
 
 import com.softserveinc.dsoky.dao.AuthorDAO;
+import com.softserveinc.dsoky.dao.BookDAO;
 import com.softserveinc.dsoky.dto.AuthorDTO;
 import com.softserveinc.dsoky.mappers.AuthorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,13 @@ import java.util.stream.Collectors;
 public class AuthorService{
 
     private final AuthorDAO authorDAO;
+    private final BookDAO bookDAO;
     private final AuthorMapper authorMapper;
 
     @Autowired
-    public AuthorService(AuthorDAO authorDAO, AuthorMapper authorMapper) {
+    public AuthorService(AuthorDAO authorDAO, BookDAO bookDAO, AuthorMapper authorMapper) {
         this.authorDAO = authorDAO;
+        this.bookDAO = bookDAO;
         this.authorMapper = authorMapper;
     }
 
@@ -51,5 +54,13 @@ public class AuthorService{
 
     public void update(AuthorDTO authorDTO) {
         authorDAO.update(authorMapper.convertToEntity(authorDTO));
+    }
+
+    public void removeRelation(long bookId, long authId){
+        bookDAO.removeFromBooksAuthors(bookId, authId);
+    }
+
+    public void insertForBook(long bookId, long authorId){
+        authorDAO.insertAuthorForBook(bookId, authorId);
     }
 }

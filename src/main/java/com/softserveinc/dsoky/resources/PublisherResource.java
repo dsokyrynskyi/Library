@@ -2,6 +2,8 @@ package com.softserveinc.dsoky.resources;
 
 import com.softserveinc.dsoky.dto.PublisherDTO;
 import com.softserveinc.dsoky.service.PublisherService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +32,7 @@ import java.net.URI;
 @Path("v1/")
 public class PublisherResource {
 
+    private static Logger log = LoggerFactory.getLogger(PublisherResource.class);
     private URI uri;
     private final PublisherService publisherService;
 
@@ -44,6 +47,7 @@ public class PublisherResource {
 
     @PostConstruct
     public void init(){
+        log.debug("Building URI template for headers from requests to PublisherResource... ");
         uri = UriBuilder.fromPath("http://{host}:{port}/{version}/")
                 .resolveTemplate("host", "localhost")
                 .resolveTemplate("port", "8080")
@@ -55,6 +59,7 @@ public class PublisherResource {
     @Path("publishers/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchAll() {
+        log.info("Fetching all the publishers... ");
         URI booksUri = uri.resolve("/books");
         URI authorsUri = uri.resolve("/authors");
         return Response.ok(publisherService.getAllDTOs())
@@ -67,6 +72,7 @@ public class PublisherResource {
     @Path("publishers/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchPublisher(@PathParam("id") long id) {
+        log.info("Fetching the publisher by id... ");
         URI booksUri = uri.resolve("publishers/"+id+"/books");
         return Response.ok(publisherService.getDTO(id))
                 .link(booksUri, "books")
@@ -77,6 +83,7 @@ public class PublisherResource {
     @Path("publishers/")
     @Consumes(MediaType.APPLICATION_JSON)
     public void savePublisher(@Valid PublisherDTO publisherDTO) {
+        log.info("Saving the publisher... ");
         publisherService.save(publisherDTO);
     }
 
@@ -84,6 +91,7 @@ public class PublisherResource {
     @Path("publishers/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public void removePublisher(@PathParam("id") long id) {
+        log.info("Removing the publisher... ");
         publisherService.remove(id);
     }
 
@@ -91,6 +99,7 @@ public class PublisherResource {
     @Path("publishers/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void updatePublisher(@PathParam("id") long id, @Valid PublisherDTO publisherDTO) {
+        log.info("Updating the publisher... ");
         publisherDTO.setId(id);
         publisherService.update(publisherDTO);
     }
@@ -99,6 +108,7 @@ public class PublisherResource {
     @Path("books/{id}/publisher")
     @Produces(MediaType.APPLICATION_JSON)
     public PublisherDTO getPublisherOfBook(@PathParam("id") long id){
+        log.info("Fetching the publisher for certain book... ");
         return publisherService.getDTOByBook(id);
     }
 
@@ -106,6 +116,7 @@ public class PublisherResource {
     @Path("books/{bId}/publisher/{pId}")
     @Produces(MediaType.APPLICATION_JSON)
     public void savePublisherForBook(@PathParam("bId") long bId, @PathParam("pId") long pId){
+        log.info("Binding the publisher with certain book... ");
         publisherService.insertForBook(bId, pId);
     }
 
@@ -113,6 +124,7 @@ public class PublisherResource {
     @Path("books/{bId}/publisher/{pId}")
     @Produces(MediaType.APPLICATION_JSON)
     public void updatePublisherForBook(@PathParam("bId") long bId, @PathParam("pId") long pId){
+        log.info("Updating the publisher for certain book... ");
         publisherService.insertForBook(bId, pId);
     }
 }

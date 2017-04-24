@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -30,6 +32,8 @@ import java.net.URI;
 
 @Component
 @Path("v1/")
+//@PermitAll
+@RolesAllowed({"USER", "ADMIN"})
 public class PublisherResource {
 
     private static Logger log = LoggerFactory.getLogger(PublisherResource.class);

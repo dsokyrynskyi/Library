@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -34,6 +35,7 @@ import java.util.List;
 
 @Component
 @Path("v1/")
+@RolesAllowed({"USER", "ADMIN"})
 public class BooksResource {
 
     private static Logger log = LoggerFactory.getLogger(BooksResource.class);

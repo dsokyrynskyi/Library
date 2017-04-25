@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+
 @Service
 public class AuthorService{
 
@@ -29,7 +31,7 @@ public class AuthorService{
     }
 
     public List<AuthorDTO> getAllDTOs() {
-        log.info("Mapping all Author entities to DTOs...");
+        log.debug("Mapping all Author entities to DTOs...");
         return authorDAO.getAll()
                 .stream()
                 .map(authorMapper::convertToDTO)
@@ -37,20 +39,20 @@ public class AuthorService{
     }
 
     public AuthorDTO getDTO(long id) {
-        log.info("Mapping the Author entity to DTO...");
+        log.debug(format("Mapping the Author #%d to DTO...", id));
         return authorMapper.convertToDTO(authorDAO.get(id));
     }
 
-    public List<AuthorDTO> getDTOByBook(long id) {
-        log.info("Mapping all Author entities of certain book to DTOs...");
-        return authorDAO.getByBook(id)
+    public List<AuthorDTO> getDTOByBook(long bookId) {
+        log.debug(format("Mapping all Author entities of Book #%d to DTOs...", bookId));
+        return authorDAO.getByBook(bookId)
                 .stream()
                 .map(authorMapper::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     public void save(AuthorDTO authorDTO) {
-        log.info("Mapping Author's DTO to entity before saving...");
+        log.debug("Mapping Author's DTO to entity before saving...");
         authorDAO.save(authorMapper.convertToEntity(authorDTO));
     }
 
@@ -60,7 +62,7 @@ public class AuthorService{
     }
 
     public void update(AuthorDTO authorDTO) {
-        log.info("Mapping Author's DTO to entity before updating...");
+        log.debug(format("Mapping Author's DTO #%d to Entity before updating...", authorDTO.getId()));
         authorDAO.update(authorMapper.convertToEntity(authorDTO));
     }
 

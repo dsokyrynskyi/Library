@@ -16,6 +16,8 @@ import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.List;
 
+import static java.lang.String.format;
+
 /**
  GET     /v1/authors/
  POST    /v1/authors/
@@ -61,7 +63,7 @@ public class AuthorsResource{
     @Path("/authors/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchAll() {
-        log.info("Fetching all the authors... ");
+        log.debug("Fetching all the authors... ");
         URI booksUri = uri.resolve("/books");
         URI publishersUri = uri.resolve("/publishers");
         return Response.ok(authorService.getAllDTOs())
@@ -74,7 +76,7 @@ public class AuthorsResource{
     @Path("/authors/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchAuthor(@PathParam("id") long id) {
-        log.info("Fetching the author by id... ");
+        log.debug(format("Fetching the author with  id %d... ", id));
         URI booksUri = uri.resolve("authors/"+id+"/books");
         return Response.ok(authorService.getDTO(id))
                 .link(booksUri, "books")
@@ -85,7 +87,7 @@ public class AuthorsResource{
     @Path("/authors/")
     @Consumes(MediaType.APPLICATION_JSON)
     public void saveAuthor(@Valid AuthorDTO authorDTO) {
-        log.info("Saving the author from UI... ");
+        log.debug("Saving the author from UI... ");
         authorService.save(authorDTO);
     }
 
@@ -94,7 +96,7 @@ public class AuthorsResource{
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void saveAuthorForBook(@PathParam("bId") long bId, @PathParam("aId") long aId) {
-        log.info("Binding the author with ID to the book with ID... ");
+        log.debug(format("Binding the author with ID %d to the book with ID %d... ", aId, bId));
         authorService.insertForBook(bId, aId);
     }
 
@@ -103,7 +105,7 @@ public class AuthorsResource{
     @Path("/authors/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public void removeAuthor(@PathParam("id") long id) {
-        log.info("Removing the author... ");
+        log.debug(format("Removing the author #%d... ", id));
         authorService.remove(id);
     }
 
@@ -111,7 +113,7 @@ public class AuthorsResource{
     @Path("authors/{aId}/books/{bId}/")
     @Produces(MediaType.APPLICATION_JSON)
     public void removeRelation(@PathParam("bId") long bId, @PathParam("aId") long aId) {
-        log.info("Removing the book from the author's list of books ... ");
+        log.debug(format("Removing the book #%d from the author's #%d list of books ... ", bId, aId));
         authorService.removeRelation(bId, aId);
     }
 
@@ -119,7 +121,7 @@ public class AuthorsResource{
     @Path("/authors/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateAuthor(@PathParam("id") long id, @Valid AuthorDTO authorDTO) {
-        log.info("Updating info about the author... ");
+        log.debug(format("Updating info about the author #%d... ", id));
         authorDTO.setId(id);
         authorService.update(authorDTO);
     }
@@ -128,7 +130,7 @@ public class AuthorsResource{
     @Path("/books/{id}/authors")
     @Produces(MediaType.APPLICATION_JSON)
     public List<AuthorDTO> getAuthorsOfBook(@PathParam("id") long id) {
-        log.info("Fetching all the authors for special book... ");
+        log.debug(format("Fetching all the authors for the Book #%d... ", id));
         return authorService.getDTOByBook(id);
     }
 }

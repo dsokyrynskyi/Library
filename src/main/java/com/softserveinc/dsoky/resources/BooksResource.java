@@ -18,6 +18,8 @@ import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.List;
 
+import static java.lang.String.format;
+
 /**
  GET     /v1/books/
  POST    /v1/books/
@@ -63,7 +65,7 @@ public class BooksResource {
     @Path("/books/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchAll() {
-        log.info("Fetching all the books... ");
+        log.debug("Fetching all the books... ");
         URI publishersUri = uri.resolve("/publishers");
         URI authorsUri = uri.resolve("/authors");
         return Response.ok(bookService.getAllBookDTOs())
@@ -76,7 +78,7 @@ public class BooksResource {
     @Path("/books/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchBook(@PathParam("id") long id) {
-        log.info("Fetching the book by id... ");
+        log.debug(format("Fetching the book with id %d... ", id));
         URI publisherUri = uri.resolve("books/"+id+"/publisher");
         URI authorsUri = uri.resolve("/books/"+id+"/authors");
         return Response.ok(bookService.getBookDTO(id))
@@ -90,7 +92,7 @@ public class BooksResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveBook(@Valid RichBookDTO book) {
-        log.info("Saving the book... ");
+        log.debug("Saving the book... ");
         bookService.saveDTO(book);
         return Response.ok().build();
     }
@@ -100,7 +102,7 @@ public class BooksResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateBook(@Valid RichBookDTO bookDTO, @PathParam("id") long bookId) {
-        log.info("Updating the book... ");
+        log.debug(format("Updating the book #%d... ", bookId));
         bookDTO.setId(bookId);
         bookService.update(bookDTO);
         return Response.ok().build();
@@ -110,7 +112,7 @@ public class BooksResource {
     @Path("/books/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public void removeBook(@PathParam("id") long id) {
-        log.info("Removing the book... ");
+        log.debug(format("Removing the book #%d... ", id));
         bookService.remove(id);
     }
 
@@ -118,7 +120,7 @@ public class BooksResource {
     @Path("/books/{bId}/authors/{aId}")
     @Produces(MediaType.APPLICATION_JSON)
     public void removeRelation(@PathParam("bId") long bId, @PathParam("aId") long aId) {
-        log.info("Removing the author from the book's list of authors... ");
+        log.debug(format("Removing the author #%d from the book's #%d list of authors... ", aId, bId));
         bookService.removeRelation(bId, aId);
     }
 
@@ -126,7 +128,7 @@ public class BooksResource {
     @Path("/authors/{id}/books")
     @Produces(MediaType.APPLICATION_JSON)
     public List<BookDTO> getBooksOfAuthor(@PathParam("id") long id){
-        log.info("Fetching all the books for certain author... ");
+        log.debug(format("Fetching all the books for Author #%d... ", id));
         return bookService.getDTOByAuthor(id);
     }
 
@@ -134,7 +136,7 @@ public class BooksResource {
     @Path("/publishers/{id}/books")
     @Produces(MediaType.APPLICATION_JSON)
     public List<BookDTO> getBooksOfPublisher(@PathParam("id") long id){
-        log.info("Fetching all the books for certain publisher...");
+        log.debug(format("Fetching all the books for Publisher #%d...", id));
         return bookService.getDTOByPublisher(id);
     }
 
@@ -142,7 +144,7 @@ public class BooksResource {
     @Path("/books/byName")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBookByName(@QueryParam("title") @NotEmpty String title){
-        log.info("Fetching the book by title...");
+        log.debug(format("Fetching the book by title = %s...", title));
         return Response.ok(bookService.getBookDTOByName(title), MediaType.APPLICATION_JSON).build();
     }
 }

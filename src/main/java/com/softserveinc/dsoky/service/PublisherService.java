@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+
 @Service
 public class PublisherService{
     private Logger log = LoggerFactory.getLogger(PublisherService.class);
@@ -23,7 +25,7 @@ public class PublisherService{
     }
 
     public List<PublisherDTO> getAllDTOs() {
-        log.info("Mapping all Publisher entities to DTOs...");
+        log.debug("Mapping all Publisher entities to DTOs...");
         return publisherDAO.getAll()
                 .stream()
                 .map(publisherMapper::convertToDTO)
@@ -31,17 +33,17 @@ public class PublisherService{
     }
 
     public PublisherDTO getDTO(long id) {
-        log.info("Mapping the Publisher entity to DTO...");
+        log.debug(format("Mapping the Publisher #%d to DTO...", id));
         return publisherMapper.convertToDTO(publisherDAO.get(id));
     }
 
-    public PublisherDTO getDTOByBook(long id) {
-        log.info("Mapping the Publisher entity of certain book to DTO...");
-        return publisherMapper.convertToDTO(publisherDAO.getByBook(id));
+    public PublisherDTO getDTOByBook(long bookId) {
+        log.debug(format("Mapping the Publisher entity of Book #%d to DTO...", bookId));
+        return publisherMapper.convertToDTO(publisherDAO.getByBook(bookId));
     }
 
     public void save(PublisherDTO publisherDTO) {
-        log.info("Mapping Publisher's DTO to entity before saving...");
+        log.debug("Mapping Publisher's DTO to entity before saving...");
         publisherDAO.save(publisherMapper.convertToEntity(publisherDTO));
     }
 
@@ -50,7 +52,7 @@ public class PublisherService{
     }
 
     public void update(PublisherDTO publisherDTO) {
-        log.info("Mapping Publisher's DTO to entity before updating...");
+        log.debug(format("Mapping Publisher's DTO #%d to entity before updating...", publisherDTO.getId() ) );
         publisherDAO.update(publisherMapper.convertToEntity(publisherDTO));
     }
 

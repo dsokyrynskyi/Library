@@ -5,3 +5,27 @@ server:
   adminConnectors:
     - type: http
       port: 9091
+logging:
+  loggers:
+    "com.softserveinc.dsoky":
+
+      level: DEBUG
+
+      appenders:
+        - type: console
+          threshold: INFO
+          target: stderr
+          logFormat: --------------> %p [%d{dd MMM yyyy HH:mm:ss,SSS}] %m%n
+        - type: file
+          currentLogFilename: ./logs/errors.log
+          threshold: ERROR
+          archive: true
+          archivedLogFilenamePattern: ./logs/errors-%d.log.gz
+          archivedFileCount: 5
+          logFormat: --------------> %p [%d{dd MMM yyyy HH:mm:ss,SSS}] %m\n
+        - type: file
+          threshold: DEBUG
+          currentLogFilename: ./logs/debug.log
+          archivedLogFilenamePattern: ./logs/debug-%d.log.gz
+          archivedFileCount: 6
+          logFormat: --------------> %p [%d{dd MMM yyyy HH:mm:ss,SSS}] %m\n

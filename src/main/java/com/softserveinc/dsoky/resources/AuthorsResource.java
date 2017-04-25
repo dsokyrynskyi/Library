@@ -2,17 +2,21 @@ package com.softserveinc.dsoky.resources;
 
 import com.softserveinc.dsoky.dto.AuthorDTO;
 import com.softserveinc.dsoky.service.AuthorService;
-import com.softserveinc.dsoky.service.BookService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.List;
+
+import static java.lang.String.format;
 
 /**
  GET     /v1/authors/
@@ -30,6 +34,7 @@ import java.util.List;
 @Component
 @Path("v1/")
 public class AuthorsResource{
+    private static Logger log = LoggerFactory.getLogger(AuthorsResource.class);
 
     private URI uri;
 
@@ -46,6 +51,7 @@ public class AuthorsResource{
 
     @PostConstruct
     public void init(){
+        log.debug("Building URI template for headers from requests to AuthorsResource... ");
         uri = UriBuilder.fromPath("http://{host}:{port}/{version}/")
                 .resolveTemplate("host", "localhost")
                 .resolveTemplate("port", "8080")
@@ -57,6 +63,7 @@ public class AuthorsResource{
     @Path("/authors/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchAll() {
+        log.debug("Fetching all the authors... ");
         URI booksUri = uri.resolve("/books");
         URI publishersUri = uri.resolve("/publishers");
         return Response.ok(authorService.getAllDTOs())
@@ -69,6 +76,7 @@ public class AuthorsResource{
     @Path("/authors/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchAuthor(@PathParam("id") long id) {
+        log.debug(format("Fetching the author with  id %d... ", id));
         URI booksUri = uri.resolve("authors/"+id+"/books");
         return Response.ok(authorService.getDTO(id))
                 .link(booksUri, "books")
@@ -78,7 +86,8 @@ public class AuthorsResource{
     @POST
     @Path("/authors/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void saveAuthor(AuthorDTO authorDTO) {
+    public void saveAuthor(@Valid AuthorDTO authorDTO) {
+        log.debug("Saving the author from UI... ");
         authorService.save(authorDTO);
     }
 
@@ -87,6 +96,7 @@ public class AuthorsResource{
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void saveAuthorForBook(@PathParam("bId") long bId, @PathParam("aId") long aId) {
+        log.debug(format("Binding the author with ID %d to the book with ID %d... ", aId, bId));
         authorService.insertForBook(bId, aId);
     }
 
@@ -95,6 +105,7 @@ public class AuthorsResource{
     @Path("/authors/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public void removeAuthor(@PathParam("id") long id) {
+        log.debug(format("Removing the author #%d... ", id));
         authorService.remove(id);
     }
 
@@ -102,13 +113,15 @@ public class AuthorsResource{
     @Path("authors/{aId}/books/{bId}/")
     @Produces(MediaType.APPLICATION_JSON)
     public void removeRelation(@PathParam("bId") long bId, @PathParam("aId") long aId) {
+        log.debug(format("Removing the book #%d from the author's #%d list of books ... ", bId, aId));
         authorService.removeRelation(bId, aId);
     }
 
     @PUT
     @Path("/authors/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateAuthor(@PathParam("id") long id, AuthorDTO authorDTO) {
+    public void updateAuthor(@PathParam("id") long id, @Valid AuthorDTO authorDTO) {
+        log.debug(format("Updating info about the author #%d... ", id));
         authorDTO.setId(id);
         authorService.update(authorDTO);
     }
@@ -117,6 +130,7 @@ public class AuthorsResource{
     @Path("/books/{id}/authors")
     @Produces(MediaType.APPLICATION_JSON)
     public List<AuthorDTO> getAuthorsOfBook(@PathParam("id") long id) {
+        log.debug(format("Fetching all the authors for the Book #%d... ", id));
         return authorService.getDTOByBook(id);
     }
 }

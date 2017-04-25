@@ -15,7 +15,7 @@ logging:
         - type: console
           threshold: INFO
           target: stderr
-          logFormat: --------------> %p [%d{dd MMM yyyy HH:mm:ss,SSS}] %m\n
+          logFormat: --------------> %p [%d{dd MMM yyyy HH:mm:ss,SSS}] %m%n
         - type: file
           currentLogFilename: ./logs/errors.log
           threshold: ERROR

@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+
 @Service
 public class BookService{
 
@@ -27,27 +29,27 @@ public class BookService{
     }
 
     public List<BookDTO> getAllBookDTOs() {
-        log.info("Mapping all Book entities to DTOs...");
+        log.debug("Mapping all Book entities to DTOs...");
         return bookDAO.getAll().stream()
                 .map(bookMapper::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     public BookDTO getBookDTO(long id){
-        log.info("Mapping the Book entity to DTO...");
+        log.debug(format("Mapping the Book #%d to DTO...", id));
         return bookMapper.convertToDTO(bookDAO.get(id));
     }
 
-    public List<BookDTO> getDTOByAuthor(long author) {
-        log.info("Mapping the Book entities of certain author to DTOs...");
-        return bookDAO.getByAuthor(author).stream()
+    public List<BookDTO> getDTOByAuthor(long authorId) {
+        log.debug(format("Mapping the Book entities of Author #%d to DTOs...", authorId));
+        return bookDAO.getByAuthor(authorId).stream()
                 .map(bookMapper::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<BookDTO> getDTOByPublisher(long id) {
-        log.info("Mapping the Book entities of certain publisher to DTOs...");
-        return bookDAO.getByPublisher(id).stream()
+    public List<BookDTO> getDTOByPublisher(long pubId) {
+        log.debug(format("Mapping the Book entities of Publisher #%d to DTOs...", pubId));
+        return bookDAO.getByPublisher(pubId).stream()
                 .map(bookMapper::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -59,18 +61,18 @@ public class BookService{
 
     @Transactional
     public void update(RichBookDTO bookDTO) {
-        log.info("Mapping the Book DTO to entity before updating...");
+        log.debug(format("Mapping the Book DTO #%d to Entity before updating...", bookDTO.getId()));
         bookDAO.update(bookMapper.convertToEntity(bookDTO));
     }
 
     @Transactional
     public void saveDTO(RichBookDTO bookDTO) {
-        log.info("Mapping the Book DTO to entity before saving...");
+        log.debug("Mapping the Book DTO to entity before saving...");
         bookDAO.save(bookMapper.convertToEntity(bookDTO));
     }
 
     public BookDTO getBookDTOByName(String bookName) {
-        log.info("Mapping the Book entity to DTO...");
+        log.debug(format("Mapping the Book entity with name %s to DTO...", bookName));
         return bookMapper.convertToDTO(bookDAO.getByName(bookName));
     }
 

@@ -33,7 +33,7 @@ public class LibraryAuthenticator implements Authenticator<BasicCredentials, Use
         MDC.put("userName", username);
 
         log.info("Authentication... ");
-        
+
         if("admin".equals(username) && VALID_USERS.get(username).equals(password))
             return Optional.of(new User(username, ImmutableSet.of("ADMIN", "USER")));
         else if(VALID_USERS.containsKey(username) && VALID_USERS.get(username).equals(password))

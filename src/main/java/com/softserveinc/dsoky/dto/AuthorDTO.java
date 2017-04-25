@@ -1,6 +1,7 @@
 package com.softserveinc.dsoky.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.softserveinc.dsoky.util.DateFormatValidator;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -39,6 +40,6 @@ public class AuthorDTO {
 
     @AssertTrue(message = "bad date format")
     private boolean isDateFormatCorrect(){
-        return date==null || date.matches("^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$");
+        return date==null || DateFormatValidator.checkDateFormat(date);
     }
 }

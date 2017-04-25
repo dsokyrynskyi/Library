@@ -18,7 +18,8 @@ public class AuthorMapper {
         authorDTO.setId(author.getId());
         authorDTO.setName(author.getName());
         authorDTO.setCountry(author.getCountry());
-        authorDTO.setDate(author.getDate().format(formatter));
+        if(author.getDate()!=null)
+            authorDTO.setDate(author.getDate().format(formatter));
         return authorDTO;
     }
     public Author convertToEntity(AuthorDTO authorDTO){

@@ -24,7 +24,7 @@ public class BookRepository extends AbstractLibraryResourceRepository<Book> impl
                 rs.getLong("id"),
                 rs.getString("name"),
                 rs.getString("isbn"),
-                rs.getDate("publish_date").toLocalDate(),
+                rs.getDate("publish_date")!= null ? rs.getDate("publish_date").toLocalDate() : null,
                 rs.getString("genre")
         );
     }

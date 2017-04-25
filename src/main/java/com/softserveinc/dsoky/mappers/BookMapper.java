@@ -30,7 +30,8 @@ public class BookMapper {
         bookDTO.setName(book.getName());
         bookDTO.setIsbn(book.getIsbn());
         bookDTO.setGenre(book.getGenre());
-        bookDTO.setPublishDate(book.getPublishDate().format(formatter));
+        if(book.getPublishDate()!=null)
+            bookDTO.setPublishDate(book.getPublishDate().format(formatter));
         return bookDTO;
     }
 

@@ -7,6 +7,7 @@ import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.util.Map;
 import java.util.Optional;
@@ -25,11 +26,14 @@ public class LibraryAuthenticator implements Authenticator<BasicCredentials, Use
     @Override
     public Optional<User> authenticate(BasicCredentials credentials) throws AuthenticationException {
 
-        log.info("Authentication... ");
 
         String username = credentials.getUsername();
         String password = credentials.getPassword();
 
+        MDC.put("userName", username);
+
+        log.info("Authentication... ");
+        
         if("admin".equals(username) && VALID_USERS.get(username).equals(password))
             return Optional.of(new User(username, ImmutableSet.of("ADMIN", "USER")));
         else if(VALID_USERS.containsKey(username) && VALID_USERS.get(username).equals(password))

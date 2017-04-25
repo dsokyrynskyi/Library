@@ -30,7 +30,6 @@ public class LibraryApplication extends Application<LibraryConfiguration>{
         context.scan("com.softserveinc.dsoky");     // all spring beans
         log.debug("Spring context was created and base package was scanned");
         environment.servlets().addServletListeners(new ContextLoaderListener(context));
-        //environment.servlets().addFilter("MDC Filter", new MDCFilter()).addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
         environment.jersey().packages("com.softserveinc.dsoky"); // resources, exception mappers, etc.
 
         environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()

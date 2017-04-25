@@ -26,7 +26,8 @@ public class AuthorMapper {
         author.setId(authorDTO.getId());
         author.setName(authorDTO.getName());
         author.setCountry(authorDTO.getCountry());
-        author.setDate(LocalDate.parse(authorDTO.getDate()));
+        if(authorDTO.getDate() != null)
+            author.setDate(LocalDate.parse(authorDTO.getDate()));
         return author;
     }
 }

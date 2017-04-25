@@ -88,6 +88,7 @@ public class PublisherResource {
     @POST
     @Path("publishers/")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public void savePublisher(@Valid PublisherDTO publisherDTO) {
         log.debug("Saving the publisher... ");
         publisherService.save(publisherDTO);
@@ -104,6 +105,7 @@ public class PublisherResource {
     @PUT
     @Path("publishers/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public void updatePublisher(@PathParam("id") long id, @Valid PublisherDTO publisherDTO) {
         log.debug(format("Updating the publisher #%d... ", id));
         publisherDTO.setId(id);

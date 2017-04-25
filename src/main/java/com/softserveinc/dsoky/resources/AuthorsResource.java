@@ -88,6 +88,7 @@ public class AuthorsResource{
     @POST
     @Path("/authors/")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public void saveAuthor(@Valid AuthorDTO authorDTO) {
         log.debug("Saving the author from UI... ");
         authorService.save(authorDTO);
@@ -122,6 +123,7 @@ public class AuthorsResource{
     @PUT
     @Path("/authors/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public void updateAuthor(@PathParam("id") long id, @Valid AuthorDTO authorDTO) {
         log.debug(format("Updating info about the author #%d... ", id));
         authorDTO.setId(id);

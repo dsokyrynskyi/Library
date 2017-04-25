@@ -19,6 +19,7 @@ public class PublisherDTO {
     private String name;
 
     @JsonProperty("country")
+    @Size(max = 100)
     private String country;
 
     public PublisherDTO(long id, String name, String country) {

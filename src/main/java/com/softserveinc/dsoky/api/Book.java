@@ -26,14 +26,4 @@ public class Book {
         this.publishDate = publishDate;
         this.genre = genre;
     }
-
-    public Book(long id, String name, String isbn, LocalDate publishDate, String genre, Publisher publisher) {
-        this.id = id;
-        this.name = name;
-        this.isbn = isbn;
-        this.publishDate = publishDate;
-        this.genre = genre;
-        this.publisher = publisher;
-        this.authors = new ArrayList<>();
-    }
 }

@@ -11,6 +11,7 @@ import org.glassfish.jersey.test.ServletDeploymentContext;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -89,6 +90,7 @@ public class PublishersResourceTest extends JerseyTest{
     @Test
     public void savePublisherDTOReturnsNoContent(){
         PublisherDTO dto = new PublisherDTO();
+        dto.setName("TEST");
         Response output = target("/v1/publishers").request().post(Entity.entity(dto, MediaType.APPLICATION_JSON));
 
         assertThat(output.getStatus(), is(204));

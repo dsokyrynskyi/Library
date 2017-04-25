@@ -123,7 +123,6 @@
             <artifactId>dropwizard-auth</artifactId>
             <version>${dropwizard.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>

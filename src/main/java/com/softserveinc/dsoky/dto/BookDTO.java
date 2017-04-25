@@ -34,6 +34,10 @@ public class BookDTO{
     public BookDTO() {
     }
 
+    public BookDTO(String name) {
+        this.name = name;
+    }
+
     public BookDTO(long id, String name, String isbn, String publishDate, String genre) {
         this.id = id;
         this.name = name;

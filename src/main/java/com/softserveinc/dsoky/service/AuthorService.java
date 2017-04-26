@@ -18,7 +18,7 @@ import static java.lang.String.format;
 @Service
 public class AuthorService{
 
-    private Logger log = LoggerFactory.getLogger(AuthorService.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthorService.class);
     private final AuthorDAO authorDAO;
     private final BookDAO bookDAO;
     private final AuthorMapper authorMapper;

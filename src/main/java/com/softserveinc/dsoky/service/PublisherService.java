@@ -15,7 +15,7 @@ import static java.lang.String.format;
 
 @Service
 public class PublisherService{
-    private Logger log = LoggerFactory.getLogger(PublisherService.class);
+    private static final Logger log = LoggerFactory.getLogger(PublisherService.class);
     private final PublisherMapper publisherMapper;
     private final PublisherDAO publisherDAO;
     @Autowired

@@ -18,7 +18,7 @@ import static java.lang.String.format;
 @Service
 public class BookService{
 
-    private Logger log = LoggerFactory.getLogger(BookService.class);
+    private static final Logger log = LoggerFactory.getLogger(BookService.class);
     private final BookDAO bookDAO;
     private final BookMapper bookMapper;
 

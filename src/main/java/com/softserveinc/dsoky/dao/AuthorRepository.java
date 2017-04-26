@@ -24,7 +24,7 @@ public class AuthorRepository extends AbstractLibraryResourceRepository<Author> 
                 rs.getInt("id"),
                 rs.getString("name"),
                 rs.getString("country"),
-                rs.getDate("birth_date").toLocalDate()
+                rs.getDate("birth_date")!=null ? rs.getDate("birth_date").toLocalDate() : null
         );
     }
 

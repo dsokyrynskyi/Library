@@ -13,6 +13,7 @@ import org.glassfish.jersey.test.ServletDeploymentContext;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.hamcrest.CoreMatchers;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -140,6 +141,8 @@ public class BooksResourceTest extends JerseyTest{
     @Test
     public void saveBookDTO(){
         RichBookDTO dto = new RichBookDTO();
+        dto.setName("test");
+        dto.setIsbn("test");
         Response output = target("/v1/books").request().post(Entity.entity(dto, MediaType.APPLICATION_JSON));
 
         assertThat(output.getStatus(), is(200));
@@ -148,6 +151,8 @@ public class BooksResourceTest extends JerseyTest{
     @Test
     public void updateExistingBook() {
         RichBookDTO dto = new RichBookDTO();
+        dto.setName("test");
+        dto.setIsbn("test");
         Response output = target("/v1/books/1").request().put(Entity.entity(dto, MediaType.APPLICATION_JSON));
 
         assertThat(output.getStatus(), is(200));

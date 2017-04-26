@@ -1,19 +1,37 @@
 package com.softserveinc.dsoky.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.softserveinc.dsoky.util.DateFormatValidator;
 import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 
 @Data
 public class BookDTO{
     @JsonProperty("id")
     private long id;
+
+    @NotEmpty
+    @NotNull
+    @Size(max = 250)
     @JsonProperty("name")
     private String name;
+
+    @NotEmpty
+    @NotNull
+    @Size(max = 150)
     @JsonProperty("isbn")
     private String isbn;
+
     @JsonProperty("publishDate")
     private String publishDate;
+
     @JsonProperty("genre")
+    @Size(max = 100)
     private String genre;
 
     public BookDTO() {
@@ -25,5 +43,10 @@ public class BookDTO{
         this.isbn = isbn;
         this.publishDate = publishDate;
         this.genre = genre;
+    }
+
+    @AssertTrue(message = "bad date format")
+    private boolean isDateFormatCorrect(){
+        return publishDate==null || DateFormatValidator.checkDateFormat(publishDate);
     }
 }

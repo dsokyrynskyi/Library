@@ -100,7 +100,7 @@ public class AuthorsResourceTest extends JerseyTest{
 
     @Test
     public void saveAuthorDTOReturnsNoContent(){
-        AuthorDTO dto = new AuthorDTO();
+        AuthorDTO dto = new AuthorDTO(1, "Test", "Test", "Test");
         Response output = target("/v1/authors").request().post(Entity.entity(dto, MediaType.APPLICATION_JSON));
 
         assertThat(output.getStatus(), is(204));
